@@ -1,45 +1,227 @@
 <html>
-<head>
-<title>Project Home Page</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
+    <body>
+        <h2>Introduction to JXTA-SOAP</h2>
 
-<body bgcolor="#FFFFFF" text="#000000">
-<h1>Default project home page </h1>
-<p>Congratulations on your new java.net project! </p>
-<p>This page is the home page for your new project. This content is appearing 
-  because you have selected the option <b>Use project index.html</b>. To edit 
-  the information displayed on this page, just use CVS to check out your project's 
-  CVS repository and edit index.html in directory www. You can get more information 
-  on how to set-up your local CVS client, click on <b>Version Control</b> on the 
-  left nav bar. </p>
-<p>If you don't want to use CVS to manage your home page, click on the <b>Edit 
-  project</b> link on this page and unclick the option <b>Use project index.html</b>. 
-  Your project home page contents will be generated from the <b>Edit project</b> 
-  field <b>Description</b>. Edit the text on that field to change your home page 
-  contents. Click on <b>Submit changes</b> to save your edits. </p>
-<p>If you are looking for <a href="https://java-net.dev.java.net/ProjectPages.html#templates">sample 
-  home page templates</a>, check out the <a href="https://java-net.dev.java.net/ProjectPages.html">java.net 
-  Project Starter Kit</a>. Copy either of the templates into your project's html 
-  to get started on your project's home page. </p>
-<p>You can find lots of helpful information in the Starter Kit to get your project 
-  started. Some of the things you will find in there include:</p>
-<ul>
-  <li>Hints on how to <a href="https://java-net.dev.java.net/ProjectPages.html#pages">set-up 
-    your project's</a> home page</li>
-  <li>Ideas on how to <a href="https://java-net.dev.java.net/ProjectPages.html#publicity">publicize 
-    your project</a> including RSS feeds</li>
-  <li>Hints on <a href="https://java-net.dev.java.net/pagedesign.html">project 
-    page HTML</a></li>
-  <li>Setting up project <a href="https://java-net.dev.java.net/ProjectPages.html#wiki">wiki 
-    pages</a></li>
-  <li>And places to go if <a href="https://java-net.dev.java.net/ProjectPages.html#feedback">you 
-    have questions</a>.</li>
-</ul>
-<p>Remember that you will attract more new members and your project team will 
-  work more effectively if you, as the project owner, supply sufficient information 
-  about your project for visitors to your project space. Good luck with your new 
-  project! </p>
-</body>
+        <p>
+            JXTA-SOAP is a package which allows SOAP communication over the JXTA Peer-to-Peer network.
+            The design goals of this project are very attractive:
+
+            <ol>
+
+	        <li>
+                    Wrapping Web Services in JXTA services.
+                </li> 
+
+                <li>
+                    Using JXTA for Web Service discovery and message transport. 
+                </li>
+
+                <li>
+                    Supporting WSS and WSRF.
+                </li>
+                
+            </ol>
+
+        </p>
+
+        <p>
+            JXTA SOAP project, which was started by Kevin Burton, is now managed by
+            <a href="http://dsg.ce.unipr.it/People/amoretti/Amoretti.html"><b>Michele Amoretti (ardarico)</b></a>
+            of Distributed Systems Group (University of Parma, Italy). Other committers are<br> 
+            - Matteo Bisi (luna61)<br>
+            - André Panisson (panisson) 
+        </p>
+        
+        <h2>News</h2>
+        <li>
+        [4 jun 2007] A <b>JXME-based version of JXTA-SOAP</b> has been released!<br> 
+        Update your source code from CVS and take a look to the README file, to know how to build jxmesoap.jar!
+        </li>
+        <li>
+	    [26 oct 2006] Libraries have been updated: now they include JXTA 2.4.1<br>
+            The basicExample has changed accordingly. Important:<br> 
+            1) XML profiles are no more used (we preferred to use the new NetworkConfigurator).<br>
+            2) Now peers connect to JXTA public NetPeerGroup
+        </li>
+        <li>
+            [16 jan 2006] <b>Service Life Cycle</b> has been introduced. The request scope is object (it is the default in Axis), 
+            so for each request the Axis server will create a new xxxService 
+            object and also in each request will call the init() and destroy() methods, 
+            as you can observe in the output of the provided examples. 
+            If the scope was session, then the init() would 
+            be called at the start of the session, and the destroy() would be called 
+            at the end of the session. And if the scope was application, then the 
+            Axis server would create a singleton shared object to service all 
+            requests, call init() in the first request, and call destroy() only if the 
+            Axis server is stopped or the service is undeployed. 
+        </li>
+        <li>
+            [22 dec 2005] It is now possible to set a <b>custom WSDD</b> for a Web Service to be deployed. This feature
+            allows, for example, to use complex data types for input/output messages. 
+        </li>
+        <li>
+            [18 nov 2005] <b>WSS</b> support (<i>i.e.</i> <b>message-level security</b>) has been introduced! Documentation: coming soon (but look at the "defaultMessage" example).
+        </li>
+
+        <li>
+            [14 nov 2005] Libraries (soap/binding/java/lib/) have been updated: now they include Axis 1.2.1 and JXTA 2.3.5.
+        </li>
+
+        <li>
+            [17 Oct 2005] Support for <b>transport-level security</b> policies has been introduced, 
+            along with a default policy based on <b>TLS</b>. Documentation: coming soon (but look at the "defaultTransport" example).
+        </li>
+
+        <li>
+            [19 Sep 2005] Source code cleaning and refactoring! JXTA-SOAP no longer performs subgroup creation. 
+            The lib/ directory now contains only useful jars.
+        </li>
+
+        <li>
+            [2 Sep 2005] The Hello example has been updated, to be compliant with Axis 1.2.1 and JXTA 2.3.4. 
+            Moreover, both service provider and consumer peers now use the Configurator class with XML profiles.
+        </li>
+        
+        <li>
+            [31 Aug 2005] Libraries (soap/binding/java/lib/) have been updated: now they include 
+            Axis 1.2.1 and JXTA 2.3.4. JXTA-SOAP source code has been updated to be compliant with new libs.
+            <b>Java 1.5</b> and Ant 1.6.5 are used to compile and test the source code.
+        </li>
+        
+        
+        <h2>Technical details</h2>
+
+        <p>
+            Current JXTA-SOAP component release is based on Axis JAX-RPC, an API for the invocation 
+            of Web Services across heterogeneous platforms. A JAX-RPC client can use stubs-based, 
+            dynamic proxy or dynamic invocation interface (DII) programming models to invoke a 
+            heterogeneous Web Service endpoint. JAX-RPC requires SOAP over HTTP for interoperability. 
+            JAX-RPC uses SAAJ API which provides a standard Java API for constructing and manipulating 
+            SOAP messages with attachments. Moreover, JAX-RPC provides support for SOAP message 
+            processing model through the SOAP message handler functionality. This enables developers 
+            to build SOAP specific extensions to support security, logging and any other facilities. 
+            In particular, JXTA-SOAP uses JXTA bidirectional pipes to carry out SOAP messages between 
+            active service instances and remote client peers.
+         </p>
+
+        <h3>Service provider peers</h3>
+        
+        <p>  
+            Web Service deployment through a JXTA service requires the instantiation of a ServiceDescriptor, 
+            the insertion of the WSDL interface in the "Parm" tag of a JXTA service advertisement (transparently created by JXTA-SOAP),
+            and the instantiation of a SOAPService in a new Thread. After that, without any additional programming effort, 
+            the service listens for messages on its input pipe, accepts these messages, creates a bidirectional pipe between 
+            the remote client peer, invokes the method on the Web Service implementation, 
+            and then returns the result to the client. 
+        </p>
+
+        <p>
+            <b>Example:</b>
+
+        </p>
+        
+        <pre>
+            //service descriptor
+            ServiceDescriptor descriptor = new ServiceDescriptor(className,            
+                                                                 serviceName,               
+                                                                 version,             
+                                                                 creator,             
+                                                                 specURI, 
+                                                                 description,
+                                                                 groupID,            
+                                                                 groupName,           
+                                                                 groupDescription,   
+                                                                 securityFlag);            
+       
+            // Add WSDL description to Param in ModuleSpecAdv
+            StructuredTextDocument param = (StructuredTextDocument)
+                StructuredDocumentFactory.newStructuredDocument(new MimeMediaType("text/xml"), "Parm");
+            String WSDLFile = ... ; // serialized WSDL interface
+            if (WSDLFile != null) {
+                Element e = param.createElement("WSDL", WSDLFile);
+                param.appendChild(e);
+            }
+
+            String WSDDFile = ... ; // serialized WSDD 
+            if (WSDDFile != null) {
+                Element e = param.createElement("WSDD", WSDDFile);
+                param.appendChild(e);
+            }
+
+            //create a new SOAPService instance to use
+            SOAPService service = new SOAPService();
+
+            // initialise the service
+            service.init(group, descriptor, param, securityPolicy);
+
+            // start a new ServiceThread running this service
+            new ServiceThread(service).start();
+        </pre>
+        
+        <h3>Service consumer peers</h3>
+
+        <p>
+            Service discovery is performed by normal JXTA attribute/value search. 
+            Once the desired service has been found, its methods can be invoked with 
+            <b>CallFactory.getInstance().createCall()</b>. This invocation returns
+            an instance of org.apache.axis.client.Call class, which is JAXRPC DII implementation 
+            of the Call interface, and it is the usual choice for invoking Web Services with the JAXRPC tool.
+        </p>
+        <p>
+            [See: <a href="http://ws.apache.org/axis/java/apiDocs/org/apache/axis/client/Call.html">
+             http://ws.apache.org/axis/java/apiDocs/org/apache/axis/client/Call.html</a>]
+        </p> 
+        <p>
+            The org.apache.axis.client.Call instance is then used to perform remote invocations,
+            by specifying the method to call and its parameters.
+        </p>
+        
+        <p>
+            <b>Example:</b>
+
+        </p>
+
+        <pre>
+            Call call = CallFactory.getInstance().createCall(descriptor, advertisement, peergroup);
+            
+            call.setOperationName(new QName(descriptor.getName(), "sayHello"));
+            call.setTimeout(new Integer(10000));
+            
+            String res = (String) call.invoke(new Object[] {"Hey JXTA peer!"});
+        </pre>
+        
+        <p>
+            CallFactory is a class provided by JXTA-SOAP to create (JAX-RPC) Call objects with the following properties:
+        </p>
+
+        <pre>
+            call.setTransport(new JXTASOAPTransport());
+            call.setProperty("peergroup", peergroup);
+            call.setProperty("advertisement", advertisement);
+            call.setProperty("descriptor", descriptor);
+        </pre>  
+     
+
+        <h2>Work in progress</h2>
+    
+        <li>
+            Is WSRF support a feasible feature? It is a desirable feature, indeed.
+        </li>
+        
+
+        <h2>Known uses</h2>
+
+        <li><a href="http://sp2a.sourceforge.net">SP2A</a> - Service-oriented Peer-to-Peer Architecture 
+
+        <li><a href="http://gigamanp2p.inf.ufrgs.br">GigaManP2P</a> The purpose of the project is to develop and 
+            deploy a P2P-based network management system to manage the GIGA Project optical network. JXTA-SOAP 
+            is (now) being used as the underlying communication system.
+
+        <h2>Links</h2>
+        
+        <li><a href="http://www.w3.org/TR/SOAP/">SOAP 1.1 protocol</a></li>
+
+        <li><a href="http://xml.apache.org/axis">Apache Axis</a></li>
+
+    </body>
 </html>
-
