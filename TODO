@@ -1,0 +1,13 @@
+
+- ability to give it a Log4J channel so that we can have our own application
+  logging without using System.out
+
+- add WSRF support
+
+- create a Bootstrap class that uses utility classes.  JXTABootraap,
+  AXISBootsrap... should be in a dedicated bootstrap package.
+
+    - all these should be in an net.jxta.soap.boostrap package.
+
+- Make a WSDL2Java version that creates JXTA-SOAP client stubs.
+

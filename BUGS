@@ -1,0 +1,19 @@
+Currently, the 'junit' target of build.xml doesn't work.
+
+
+In binding/java/src/net/jxta/tests/TestJXTA,java,
+only the testJXTAWithNewPeerGroup() test works.
+
+
+Attachments don't work. In SOAPService.java:
+  Message msg = new Message(request.getMessage());
+The parameter is only used as the SOAPPart, so
+the whole message, with attachments and everything
+is put as the SOAPPart, which obviously doesn't
+work. There doesn't seem to be a way to construct
+an entire Message back from a byte stream/string.
+If we use ObjectInput/OutputStrem, it's java specific.
+
+
+
+

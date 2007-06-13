@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="HelloServer" default="build" basedir=".">
+
+  <!-- Sources locations for build -->
+  <property name="src.dir" value="src"/>
+  <property name="examples.dir" value="examples"/>
+
+  <!-- Libraries location for build -->
+  <property name="lib.dir" value="../../../lib"/>
+  <property name="libsoap.dir" value="../../../build/jxta-soap.jar"/>
+  <property name="libaxis.dir" value="../../../lib/axis"/>
+  <property name="libjxta.dir" value="../../../lib/jxta"/>
+
+  <!-- Location for the execution -->
+  <property name="build.dir" value="build"/>
+
+  <!-- Temporary locations for build -->
+  <property name="docs.dir" value="docs"/>
+
+
+  <!-- Conditions for compiling examples -->
+  <target name="init" />
+
+
+  <!-- Compile -->
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac debug="on" deprecation="on" destdir="${build.dir}">
+      <compilerarg value="-Xlint" />
+      <src path="${src.dir}" />
+      <classpath>
+        <pathelement location="${libaxis.dir}"/>
+        <pathelement location="${libjxta.dir}"/>
+        <pathelement location="${lib.dir}"/>
+        <pathelement location="${libsoap.dir}"/>
+        <fileset dir="${lib.dir}">
+        <!--fileset dir="${libsoap.dir}"-->
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${classes.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+
+
+  <!-- Build jar -->
+  <target name="jar" depends="init" >
+    <echo message="Building jar file..."/> 
+    <jar jarfile="streaming.jar"
+      compress="false"
+      update="no"
+      basedir="${build.dir}"
+      includes="**"/>
+    <move file="streaming.jar" todir="${build.dir}"/>
+  </target>
+
+
+  <!-- Run peer -->
+  <target name="run_server">
+    <delete dir=".jxta/cm"/>
+    <delete file=".jxta/PlatformConfig"/>
+    <delete file=".jxta/jxta.properties"/>
+    <java classname="HelloServer" fork="true">
+    <arg value="INFO"/>
+    <classpath>
+      <pathelement location="${libaxis.dir}"/>
+      <pathelement location="${libjxta.dir}"/>
+      <pathelement location="${lib.dir}"/>
+      <pathelement location="${libsoap.dir}"/>
+      <fileset dir="${lib.dir}">
+        <include name="**/*.jar"/>
+      </fileset>
+      <pathelement location="${build.dir}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- Build documentation -->
+  <target name="javadoc" description="Javadoc for application">
+    <mkdir dir="${docs.dir}/javadoc"/>
+    <javadoc destdir="${docs.dir}/javadoc">
+      <fileset dir="${src.dir}"/>
+      <classpath>
+        <pathelement location="${lib.dir}"/>
+        <fileset dir="${lib.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>
+      </classpath>
+    </javadoc>
+  </target>
+
+
+  <!-- Clean -->
+  <target name="clean">
+    <!--delete dir="classes"/--> 
+    <delete dir="build"/>
+    <delete dir="docs/javadoc"/>
+    <delete dir=".jxta/ProviderPeer/cm"/>
+    <delete dir=".jxta/ProviderPeer"/>
+    <delete file=".jxta/ProviderPeer/config.properties"/>
+    <delete file=".jxta/ProviderPeer/PlatformConfig"/>
+    <delete file=".jxta/ProviderPeer/jxta.properties"/>
+    <delete file="server-config.wsdd"/>
+    <delete file="ServiceParm.xml"/>
+  </target>
+
+
+  <target depends="compile" description="Build hello server" name="build"/>
+  <target depends="run_server" description="Run hello server" name="run"/>
+  <target depends="javadoc" name="doc"/>
+  <target depends="clean" description="Clean all" name="clear"/>
+
+</project>

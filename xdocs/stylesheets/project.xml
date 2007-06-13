@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="Fionna" href="http://reptile.openprivacy.org/">
+
+    <title>JXTA-SOAP</title>
+
+    <logo href="/images/logo.png">JXTA-SOAP</logo>
+
+    <body>
+
+        <menu name="Essentials">
+
+            <item name="Overview"                   href="index.html"/>
+            <item name="UML Class Diagrams (SVG)"   href="/jase/svg"/>
+            <item name="UML Class Diagrams (PNG)"   href="/jase/png"/>
+            <item name="UML Class Diagrams (HTML)"  href="/jase/html/org.jxta.soap.html"/>
+            <item name="Javadoc"                    href="/javadoc/index.html"/>
+
+        </menu>
+
+    </body>
+
+</project>
