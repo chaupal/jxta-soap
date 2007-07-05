@@ -6,7 +6,7 @@ $Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
 
 -->
 
-<project name="jxta-soap" default="core" basedir=".">
+<project name="jxta-soap" default="core.j2se" basedir=".">
 
     <property environment="env"/>
     <property name="project.j2se" value="jxta-soap"/>
