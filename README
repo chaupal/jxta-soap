@@ -1,4 +1,4 @@
-To compile everything: 
+To compile: 
 
 cd binding/java
 
@@ -8,11 +8,6 @@ ant jar.j2se
 
 These commands generate jxtasoap.jar
 
-JXTA-SOAP based on JXME (CDC proxyless):
-ant core.cdc
-ant jar.cdc
-
-These commands generate jxmesoap.jar
 
 A good starting point to see how things work is the example in
 /examples subdir (only for JXTA-SOAP based on JXTA J2SE).
