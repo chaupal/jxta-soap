@@ -303,7 +303,7 @@ public class SOAPService {
 		.newStructuredDocument( new MimeMediaType( "text/xml" ), "Parm" );
 	    
 	    TextElement element = newparam.createElement( "peer-id", pg.getPeerID().toString() );			
-	    ((LiteXMLDocument)newparam).appendChild( element );
+	    ((LiteXMLDocument)newparam).appendChild( (LiteXMLDocument)element );
 	    msadv.setParam( newparam );
 	}
 	else {		
@@ -315,7 +315,7 @@ public class SOAPService {
 	    }
 	    // new version allowing additional params from the method argument			
 	    TextElement element = param.createElement( "peer-id", pg.getPeerID().toString() );
-	    ((LiteXMLDocument)param).appendChild( element );
+	    ((LiteXMLDocument)param).appendChild( (LiteXMLDocument)element );
 	    msadv.setParam( param );
 	}
 	
