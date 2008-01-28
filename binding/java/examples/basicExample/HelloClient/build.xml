@@ -8,7 +8,7 @@
 
   <!-- Libraries location for build -->
   <property name="lib.dir" value="../../../lib"/>
-  <property name="libsoap.dir" value="../../../build/jxta-soap.jar"/>
+  <property name="libsoap" value="../../../build/jxta-soap.jar"/>
   <property name="libaxis.dir" value="../../../lib/axis"/>
   <property name="libjxta.dir" value="../../../lib/jxta"/>
 
@@ -31,27 +31,16 @@
       <classpath>
         <pathelement location="${libaxis.dir}"/>
         <pathelement location="${libjxta.dir}"/>
-        <pathelement location="${lib.dir}"/>
-        <pathelement location="${libsoap.dir}"/>
-        <fileset dir="${lib.dir}">
-        <!--fileset dir="${libsoap.dir}"-->
+        <pathelement location="${libsoap}"/>
+        <fileset dir="${libaxis.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${libjxta.dir}">
           <include name="**/*.jar"/>
         </fileset>
         <pathelement location="${classes.dir}"/>
       </classpath>
     </javac>
-  </target>
-
-
-  <!-- Build jar -->
-  <target name="jar" depends="init" >
-    <echo message="Building jar file..."/> 
-    <jar jarfile="streaming.jar"
-      compress="false"
-      update="no"
-      basedir="${build.dir}"
-      includes="**"/>
-    <move file="streaming.jar" todir="${build.dir}"/>
   </target>
 
 
@@ -65,11 +54,13 @@
     <classpath>
       <pathelement location="${libaxis.dir}"/>
       <pathelement location="${libjxta.dir}"/>
-      <pathelement location="${lib.dir}"/>
-      <pathelement location="${libsoap.dir}"/>
-      <fileset dir="${lib.dir}">
-        <include name="**/*.jar"/>
-      </fileset>
+      <pathelement location="${libsoap}"/>
+        <fileset dir="${libaxis.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${libjxta.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
       <pathelement location="${build.dir}"/>
       </classpath>
     </java>
