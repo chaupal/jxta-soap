@@ -18,7 +18,6 @@
   <!-- Temporary locations for build -->
   <property name="docs.dir" value="docs"/>
 
-
   <!-- Conditions for compiling examples -->
   <target name="init" />
 
@@ -42,18 +41,6 @@
         <pathelement location="${classes.dir}"/>
       </classpath>
     </javac>
-  </target>
-
-
-  <!-- Build jar -->
-  <target name="jar" depends="init" >
-    <echo message="Building jar file..."/> 
-    <jar jarfile="streaming.jar"
-      compress="false"
-      update="no"
-      basedir="${build.dir}"
-      includes="**"/>
-    <move file="streaming.jar" todir="${build.dir}"/>
   </target>
 
 
