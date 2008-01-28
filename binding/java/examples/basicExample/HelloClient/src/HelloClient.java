@@ -76,7 +76,6 @@ public class HelloClient implements RendezvousListener {
     private String WSDLbuffer = new String();
     private String decodedWSDL = new String();
     
-
     public HelloClient(String instanceName) {
        this.instanceName = instanceName;
     }
@@ -86,17 +85,18 @@ public class HelloClient implements RendezvousListener {
      * @param args the command line arguments
      */
     public static void main( String args[] ) {
-	HelloClient consumerPeer = new HelloClient("ConsumerPeer");
+    	System.setProperty("net.jxta.logging.Logging", "OFF");
+    	HelloClient consumerPeer = new HelloClient("ConsumerPeer");
         System.out.println("Starting ConsumerPeer ....");
         consumerPeer.start("principal", "peerPassword");	
-	consumerPeer.authenticateToPSE();
-	System.out.println("-------------------------------------------------");
+        consumerPeer.authenticateToPSE();
+        System.out.println("-------------------------------------------------");
         consumerPeer.waitForRendezvousConnection(10000);
-	System.out.println("-------------------------------------------------");
-	consumerPeer.findService();
-	System.out.println("-------------------------------------------------");
-	consumerPeer.interactWithService();
-	System.out.println("-------------------------------------------------");
+        System.out.println("-------------------------------------------------");
+        consumerPeer.findService();
+        System.out.println("-------------------------------------------------");
+        consumerPeer.interactWithService();
+        System.out.println("-------------------------------------------------");
         System.out.println("Good Bye ....");
         consumerPeer.stop();
     }
@@ -127,7 +127,7 @@ public class HelloClient implements RendezvousListener {
                 try {
                     config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
-		    config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
+                    config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
                 }
@@ -138,7 +138,7 @@ public class HelloClient implements RendezvousListener {
                 }
             }
             // create, and Start the default jxta NetPeerGroup
-            NetPeerGroupFactory factory  = new NetPeerGroupFactory((ConfigParams) config.getPlatformConfig(), instanceHome.toURI());
+            NetPeerGroupFactory factory  = new NetPeerGroupFactory(config.getPlatformConfig(), instanceHome.toURI());
             netPeerGroup = factory.getInterface();
             System.out.println("Node PeerID :"+netPeerGroup.getPeerID().getUniqueValue().toString());
             rendezvous = netPeerGroup.getRendezVousService();
