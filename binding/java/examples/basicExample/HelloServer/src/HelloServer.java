@@ -32,8 +32,8 @@ import net.jxta.document.StructuredTextDocument;
 import net.jxta.document.TextElement;
 import net.jxta.exception.ConfiguratorException;
 import net.jxta.exception.PeerGroupException;
-import net.jxta.ext.config.Configurator;
-import net.jxta.ext.config.Profile;
+//import net.jxta.ext.config.Configurator;
+//import net.jxta.ext.config.Profile;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.membership.pse.PSEMembershipService;
 import net.jxta.impl.membership.pse.StringAuthenticator;
@@ -73,10 +73,11 @@ public class HelloServer {
      * @param args the command line arguments
      */
     public static void main( String args[] ) {
-	HelloServer providerPeer = new HelloServer("ProviderPeer");
+    	System.setProperty("net.jxta.logging.Logging", "OFF");
+    	HelloServer providerPeer = new HelloServer("ProviderPeer");
         System.out.println("Starting ProviderPeer ....");
         providerPeer.start("principal", "peerPassword");	
-	providerPeer.authenticateToPSE();
+        providerPeer.authenticateToPSE();
 
         providerPeer.createSOAPService();
 
