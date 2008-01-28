@@ -47,6 +47,7 @@ import net.jxta.endpoint.ByteArrayMessageElement;
 import net.jxta.endpoint.InputStreamMessageElement;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.document.LiteXMLDocument;
+import net.jxta.impl.document.LiteXMLElement;
 import net.jxta.impl.membership.pse.PSEMembershipService;
 import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
@@ -315,7 +316,8 @@ public class SOAPService {
 	    }
 	    // new version allowing additional params from the method argument			
 	    TextElement element = param.createElement( "peer-id", pg.getPeerID().toString() );
-	    ((LiteXMLDocument)param).appendChild( (LiteXMLDocument)element );
+	    //((LiteXMLDocument)param).appendChild( (LiteXMLDocument)element );
+	    ((LiteXMLDocument)param).appendChild( (LiteXMLElement)element );
 	    msadv.setParam( param );
 	}
 	
