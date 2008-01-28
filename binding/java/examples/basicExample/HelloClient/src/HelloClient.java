@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Vector;
 import javax.xml.namespace.QName;
@@ -24,23 +22,16 @@ import javax.xml.namespace.QName;
 import net.jxta.credential.AuthenticationCredential;
 import net.jxta.credential.Credential;
 import net.jxta.discovery.DiscoveryService;
-import net.jxta.document.Advertisement;
 import net.jxta.document.StructuredTextDocument;
 import net.jxta.document.TextElement;
-import net.jxta.exception.ConfiguratorException;
-import net.jxta.exception.PeerGroupException;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.membership.pse.PSEMembershipService;
 import net.jxta.impl.membership.pse.StringAuthenticator;
-import net.jxta.membership.InteractiveAuthenticator;
 import net.jxta.membership.MembershipService;
-import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.NetPeerGroupFactory;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.platform.NetworkConfigurator;
-import net.jxta.protocol.ConfigParams;
-import net.jxta.protocol.RdvAdvertisement;
 import net.jxta.protocol.ModuleImplAdvertisement;
 import net.jxta.protocol.ModuleSpecAdvertisement;
 import net.jxta.rendezvous.RendezvousEvent;
@@ -71,9 +62,9 @@ public class HelloClient implements RendezvousListener {
     //private Object connectionCondition = new Object();
     //private final static Logger LOG = Logger.getLogger(HelloClient.class.getName());
     //private String userLogLevel = "WARN";
-    private DiscoveryService discoverySvc = null;	
+    //private DiscoveryService discoverySvc = null;	
     private ModuleSpecAdvertisement msadv = null;
-    private String WSDLbuffer = new String();
+    //private String WSDLbuffer = new String();
     private String decodedWSDL = new String();
     
     public HelloClient(String instanceName) {
@@ -110,9 +101,11 @@ public class HelloClient implements RendezvousListener {
      * @param  password   the root cert password
      */
     public synchronized void start(String principal, String password) {
+    	
         if (started) {
             return;
         }
+        
         try {
             File instanceHome = new File(home, instanceName);
             NetworkConfigurator config = new NetworkConfigurator();
@@ -144,7 +137,8 @@ public class HelloClient implements RendezvousListener {
             rendezvous = netPeerGroup.getRendezVousService();
             rendezvous.addListener(this);
             started = true;
-        } catch (PeerGroupException e) {
+        //} catch (PeerGroupException e) {
+        } catch (Exception e) {
             // could not instantiate the group, print the stack and exit
             System.out.println("fatal error : group creation failure");
             e.printStackTrace();
@@ -244,7 +238,7 @@ public class HelloClient implements RendezvousListener {
      * @param  principal  the principal
      * @param  password   pass word
      */
-    
+    /*
     public static void login(PeerGroup group, String principal, String password) {
         try {
             StringAuthenticator auth = null;
@@ -286,7 +280,7 @@ public class HelloClient implements RendezvousListener {
             System.out.flush();
         }
     }    
-    
+    */
 
     /**
      * Blocks if not connected to a rendezvous, or
