@@ -63,7 +63,7 @@ $Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
     </path>
 
     <!-- =================================================================== -->
-    <!-- Handles J2SE compilation                                      -->
+    <!-- Handles J2SE compilation                                      		 -->
     <!-- =================================================================== -->
     <target name="core.j2se">        
         <mkdir dir="${build.dir}"/>
