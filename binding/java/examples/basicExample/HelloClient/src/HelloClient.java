@@ -28,14 +28,13 @@ import net.jxta.id.IDFactory;
 import net.jxta.impl.membership.pse.PSEMembershipService;
 import net.jxta.impl.membership.pse.StringAuthenticator;
 import net.jxta.membership.MembershipService;
+import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.NetPeerGroupFactory;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.platform.NetworkConfigurator;
 import net.jxta.protocol.ModuleImplAdvertisement;
 import net.jxta.protocol.ModuleSpecAdvertisement;
-import net.jxta.rendezvous.RendezvousEvent;
-import net.jxta.rendezvous.RendezvousListener;
 import net.jxta.rendezvous.RendezVousService;
 
 import jxta.security.exceptions.CryptoException;
@@ -47,24 +46,16 @@ import net.jxta.soap.ServiceDescriptor;
 
 import org.apache.axis.client.Call;
 
-//import org.apache.log4j.Level;
-//import org.apache.log4j.Logger;
 
-public class HelloClient implements RendezvousListener {
+public class HelloClient { 
 
     private PeerGroup netPeerGroup = null;
     private boolean started = false;
     private boolean stopped = false;
     private RendezVousService rendezvous;
-    private final static String connectLock = new String("connectLock");
     private String instanceName = "NA";
     private final static File home = new File(System.getProperty("JXTA_HOME", ".jxta"));
-    //private Object connectionCondition = new Object();
-    //private final static Logger LOG = Logger.getLogger(HelloClient.class.getName());
-    //private String userLogLevel = "WARN";
-    //private DiscoveryService discoverySvc = null;	
     private ModuleSpecAdvertisement msadv = null;
-    //private String WSDLbuffer = new String();
     private String decodedWSDL = new String();
     
     public HelloClient(String instanceName) {
@@ -79,10 +70,8 @@ public class HelloClient implements RendezvousListener {
     	System.setProperty("net.jxta.logging.Logging", "OFF");
     	HelloClient consumerPeer = new HelloClient("ConsumerPeer");
         System.out.println("Starting ConsumerPeer ....");
-        consumerPeer.start("principal", "peerPassword");	
+        consumerPeer.start("EDGE", "principal", "peerPassword", false);	
         consumerPeer.authenticateToPSE();
-        System.out.println("-------------------------------------------------");
-        consumerPeer.waitForRendezvousConnection(10000);
         System.out.println("-------------------------------------------------");
         consumerPeer.findService();
         System.out.println("-------------------------------------------------");
@@ -100,7 +89,7 @@ public class HelloClient implements RendezvousListener {
      * @param  principal  principal used the generate the self signed peer root cert
      * @param  password   the root cert password
      */
-    public synchronized void start(String principal, String password) {
+    public synchronized void start(String nodeType, String principal, String password, boolean multicastOn) {
     	
         if (started) {
             return;
@@ -114,13 +103,17 @@ public class HelloClient implements RendezvousListener {
                 config.setPeerID(IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID));
                 config.setName(instanceName);
                 config.setDescription("Created by ConsumerPeer");
-                config.setMode(NetworkConfigurator.EDGE_NODE);
+                if (nodeType.equals("RDV"))
+                	config.setMode(NetworkConfigurator.RDV_NODE);
+                else if (nodeType.equals("EDGE"))
+                	config.setMode(NetworkConfigurator.EDGE_NODE);
+                config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
                 try {
+                	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                     config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
-                    config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
                 }
@@ -133,16 +126,53 @@ public class HelloClient implements RendezvousListener {
             // create, and Start the default jxta NetPeerGroup
             NetPeerGroupFactory factory  = new NetPeerGroupFactory(config.getPlatformConfig(), instanceHome.toURI());
             netPeerGroup = factory.getInterface();
-            System.out.println("Node PeerID :"+netPeerGroup.getPeerID().getUniqueValue().toString());
-            rendezvous = netPeerGroup.getRendezVousService();
-            rendezvous.addListener(this);
-            started = true;
-        //} catch (PeerGroupException e) {
+            System.out.println("Node PeerID :" + netPeerGroup.getPeerID().getUniqueValue().toString());
+            rendezvous = netPeerGroup.getRendezVousService();           
         } catch (Exception e) {
             // could not instantiate the group, print the stack and exit
             System.out.println("fatal error : group creation failure");
             e.printStackTrace();
             System.exit(1);
+        }
+        started = true;
+        if (nodeType.equals("EDGE") && !multicastOn)
+        	this.waitForRendezvousConnection(5000);
+    }
+
+    
+    /**
+     * Blocks if not connected to a rendezvous, or
+     * until a connection to rendezvous node occurs
+     *
+     * @param  timeout  timeout in milliseconds
+     */
+    public void waitForRendezvousConnection(long timeout) {
+        if (!rendezvous.isConnectedToRendezVous() || !rendezvous.isRendezVous()) {
+        	int numAttempts = 1;
+        	System.out.println(" Waiting to connect to a rendezvous... ");
+        	while(!rendezvous.isConnectedToRendezVous()) {
+        		try {
+        	    	System.out.println("attempt " + numAttempts);
+        	    	Thread.sleep(timeout);
+        	    	numAttempts++;
+        	    } catch( Exception e ) {
+        	    	System.out.println("Exception in connecting to rdv!");
+        	    	e.printStackTrace();
+        	    	System.exit(1);
+        	    }
+        	}
+        	// Ok, now the peer is connected to a RDV		    
+        	System.out.println(" [CONNECTED] in " + numAttempts + " attempts");
+        	PeerID rdvId = null;
+        	Enumeration rdvEnum = rendezvous.getConnectedRendezVous();
+    	    if( rdvEnum != null ) {
+    	    	while( rdvEnum.hasMoreElements() ) {
+    	    		rdvId = (PeerID) rdvEnum.nextElement();
+    	    		if ( rdvId != null )
+    	    			break;
+    	    	}
+    	    	System.out.println("I am connected to " + rdvId.toString());
+    	    }
         }
     }
 
@@ -231,83 +261,11 @@ public class HelloClient implements RendezvousListener {
 
 
     /**
-     *  Establishes group credential.  This is a required step when planning to
-     *  to utilize TLS messegers or secure pipes
-     *
-     * @param  group      peer group to establish credentials in
-     * @param  principal  the principal
-     * @param  password   pass word
-     */
-    /*
-    public static void login(PeerGroup group, String principal, String password) {
-        try {
-            StringAuthenticator auth = null;
-            MembershipService membership = group.getMembershipService();
-            Credential cred = membership.getDefaultCredential();
-            if (cred == null) {
-                AuthenticationCredential authCred = new AuthenticationCredential(group, "StringAuthentication", null);
-                try {
-                    auth = (StringAuthenticator) membership.apply(authCred);
-                } catch (Exception failed) {
-                    ;
-                }
-
-                if (auth != null) {
-                    auth.setAuth1_KeyStorePassword(password.toCharArray());
-                    auth.setAuth2Identity(group.getPeerID());
-                    auth.setAuth3_IdentityPassword(principal.toCharArray());
-                    if (auth.isReadyForJoin()) {
-                        membership.join(auth);
-                    }
-                }
-            }
-
-            cred = membership.getDefaultCredential();
-            if (null == cred) {
-                AuthenticationCredential authCred = new AuthenticationCredential(group, "InteractiveAuthentication", null);
-                InteractiveAuthenticator iAuth = (InteractiveAuthenticator) membership.apply(authCred);
-                if (iAuth.interact() && iAuth.isReadyForJoin()) {
-                    membership.join(iAuth);
-                }
-            }
-        } catch (Throwable e) {
-            // make sure output buffering doesn't wreck console display.
-            System.err.println("Uncaught Throwable caught by 'main':");
-            e.printStackTrace();
-            System.exit(1);
-        } finally {
-            System.err.flush();
-            System.out.flush();
-        }
-    }    
-    */
-
-    /**
-     * Blocks if not connected to a rendezvous, or
-     * until a connection to rendezvous node occurs
-     *
-     * @param  timeout  timeout in milliseconds
-     */
-    public void waitForRendezvousConnection(long timeout) {
-        if (!rendezvous.isConnectedToRendezVous() || !rendezvous.isRendezVous()) {
-            System.out.println("Waiting for Rendezvous Connection");
-            try {
-                if (!rendezvous.isConnectedToRendezVous()) {
-                    synchronized (connectLock) {
-                        connectLock.wait(timeout);
-                    }
-                }
-                //System.out.println("Connected to Rendezvous");
-            } catch (InterruptedException e) {}
-        }
-    }
-
-
-    /**
      *  rendezvousEvent the rendezvous event
      *
      * @param  event  rendezvousEvent
      */
+    /*
     public void rendezvousEvent(RendezvousEvent event) {
         if (event.getType() == event.RDVCONNECT ||
             event.getType() == event.RDVRECONNECT ||
@@ -328,7 +286,7 @@ public class HelloClient implements RendezvousListener {
             }
         }
     }
-
+     */
 
     /**
      * Discovering the specified service module spec adv (by Name)
@@ -509,7 +467,7 @@ public class HelloClient implements RendezvousListener {
         if (stopped && !started) {
             return;
         }
-        rendezvous.removeListener(this);
+        //rendezvous.removeListener(this);
         netPeerGroup.stopApp();
         netPeerGroup.unref();
         netPeerGroup = null;
