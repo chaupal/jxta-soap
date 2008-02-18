@@ -15,9 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-//import javax.security.cert.CertificateException;
 
 import jxta.security.util.URLBase64;
 
@@ -25,44 +25,34 @@ import net.jxta.credential.AuthenticationCredential;
 import net.jxta.credential.Credential;
 import net.jxta.document.Element;
 import net.jxta.document.MimeMediaType;
-import net.jxta.document.StructuredDocument;
 import net.jxta.document.StructuredDocumentFactory;
-import net.jxta.document.StructuredDocumentUtils;
 import net.jxta.document.StructuredTextDocument;
-import net.jxta.document.TextElement;
-import net.jxta.exception.ConfiguratorException;
-import net.jxta.exception.PeerGroupException;
-//import net.jxta.ext.config.Configurator;
-//import net.jxta.ext.config.Profile;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.membership.pse.PSEMembershipService;
 import net.jxta.impl.membership.pse.StringAuthenticator;
 import net.jxta.membership.MembershipService;
+import net.jxta.peer.PeerID;
 import net.jxta.peergroup.NetPeerGroupFactory;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.platform.NetworkConfigurator;
-import net.jxta.protocol.ConfigParams;  
 import net.jxta.protocol.ModuleImplAdvertisement;
 
+import net.jxta.rendezvous.RendezVousService;
 import net.jxta.soap.ServiceDescriptor;
 import net.jxta.soap.SOAPServiceThread;
 import net.jxta.soap.SOAPService;
 
-//import org.apache.log4j.Level;
-//import org.apache.log4j.Logger;
 
 public class HelloServer {
 
-    //private final static Logger LOG = Logger.getLogger(HelloServer.class.getName());
     private PeerGroup netPeerGroup = null;
     private boolean started = false;
     private boolean stopped = false;
-    //private RendezVousService rendezvous;
     private String userLogLevel = "WARN";
     private String instanceName = "NA";
+    private RendezVousService rendezvous;
     private final static File home = new File(System.getProperty("JXTA_HOME", ".jxta"));
-
 
     public HelloServer(String instanceName) {
        this.instanceName = instanceName;
@@ -76,11 +66,10 @@ public class HelloServer {
     	System.setProperty("net.jxta.logging.Logging", "OFF");
     	HelloServer providerPeer = new HelloServer("ProviderPeer");
         System.out.println("Starting ProviderPeer ....");
-        providerPeer.start("principal", "peerPassword");	
+        providerPeer.start("RDV", "principal", "peerPassword", false);	
         providerPeer.authenticateToPSE();
-
+        System.out.println("-------------------------------------------------");
         providerPeer.createSOAPService();
-
         providerPeer.stop();
     }
 
@@ -89,8 +78,7 @@ public class HelloServer {
      * Read peer parameters from XML profile file and start
      * the JXTA platform	 
      */
-    private void start(String principal, String password) {
-	// RDV configuration
+    private void start(String nodeType, String principal, String password, boolean multicastOn) {
         try {
             File instanceHome = new File(home, instanceName);
             NetworkConfigurator config = new NetworkConfigurator();
@@ -99,39 +87,81 @@ public class HelloServer {
                 config.setPeerID(IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID));
                 config.setName(instanceName);
                 config.setDescription("Created by ProviderPeer");
-                config.setMode(NetworkConfigurator.RDV_NODE);
+                if (nodeType.equals("RDV"))
+                	config.setMode(NetworkConfigurator.RDV_NODE);
+                else if (nodeType.equals("EDGE"))
+                	config.setMode(NetworkConfigurator.EDGE_NODE);
+                config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
                 try {
+                	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                     config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
-		            config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
-                }
+                }                
                 try {
                     config.save();
                 } catch (IOException io) {
                     io.printStackTrace();
                 }
             }
-            // create, and Start the default jxta NetPeerGroup
+            // create and Start the default jxta NetPeerGroup
             NetPeerGroupFactory factory  = new NetPeerGroupFactory(config.getPlatformConfig(), instanceHome.toURI());
             netPeerGroup = factory.getInterface();
-            System.out.println("Node PeerID :"+netPeerGroup.getPeerID().getUniqueValue().toString());
-            //rendezvous = netPeerGroup.getRendezVousService();
-            started = true;
+            rendezvous = netPeerGroup.getRendezVousService();
+            System.out.println("Node PeerID :"+netPeerGroup.getPeerID().getUniqueValue().toString());           
         } catch (Exception e) {
             // could not instantiate the group, print the stack and exit
             System.out.println("fatal error : group creation failure");
             e.printStackTrace();
             System.exit(1);
         }
-
+        started = true;
         System.out.println("Peer started and correctly joined the NetPeerGroup " + netPeerGroup.getPeerGroupID().toString());
+        if (nodeType.equals("EDGE") && !multicastOn)
+        	this.waitForRendezvousConnection(5000);
     }
 
-
+    
+    /**
+     * Blocks if not connected to a rendezvous, or
+     * until a connection to rendezvous node occurs
+     *
+     * @param  timeout  timeout in milliseconds
+     */
+    public void waitForRendezvousConnection(long timeout) {
+        if (!rendezvous.isConnectedToRendezVous() || !rendezvous.isRendezVous()) {
+        	int numAttempts = 1;
+        	System.out.println(" Waiting to connect to a rendezvous... ");
+        	while(!rendezvous.isConnectedToRendezVous()) {
+        		try {
+        	    	System.out.println("attempt " + numAttempts);
+        	    	Thread.sleep(timeout);
+        	    	numAttempts++;
+        	    } catch( Exception e ) {
+        	    	System.out.println("Exception in connecting to rdv!");
+        	    	e.printStackTrace();
+        	    	System.exit(1);
+        	    }
+        	}
+        	// Ok, now the peer is connected to a RDV		    
+        	System.out.println(" [CONNECTED] in " + numAttempts + " attempts");
+        	PeerID rdvId = null;
+        	Enumeration rdvEnum = rendezvous.getConnectedRendezVous();
+    	    if( rdvEnum != null ) {
+    	    	while( rdvEnum.hasMoreElements() ) {
+    	    		rdvId = (PeerID) rdvEnum.nextElement();
+    	    		if ( rdvId != null )
+    	    			break;
+    	    	}
+    	    	System.out.println("I am connected to " + rdvId.toString());
+    	    }
+        }
+    }
+    
+    
     /**
     * Authenticates this peer to the PSEMembership Service
     * in order to enabling it to use the JXTA secure pipes
@@ -214,6 +244,7 @@ public class HelloServer {
             System.exit(1);
         }
     }
+
 
     /**
      * Create a SOAPService and enabling it
@@ -321,7 +352,6 @@ public class HelloServer {
         if (stopped && !started) {
             return;
         }
-        //rendezvous.removeListener(this);
         netPeerGroup.stopApp();
         netPeerGroup.unref();
         netPeerGroup = null;
