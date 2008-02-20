@@ -93,6 +93,7 @@
     <delete file=".jxta/ProviderPeer/config.properties"/>
     <delete file=".jxta/ProviderPeer/PlatformConfig"/>
     <delete file=".jxta/ProviderPeer/jxta.properties"/>
+  	<delete dir=".jxta"/>
     <delete file="server-config.wsdd"/>
     <delete file="ServiceParm.xml"/>
   </target>
