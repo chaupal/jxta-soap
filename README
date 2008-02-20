@@ -9,8 +9,8 @@ ant jar.j2se
 These commands generate jxtasoap.jar
 
 
-A good starting point to see how things work is the example in
-/examples subdir (only for JXTA-SOAP based on JXTA J2SE).
+A good starting point to see how things work is the basicExample in
+binding/java/examples directory.
 
 
 Michele Amoretti (ardarico)
