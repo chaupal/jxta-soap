@@ -32,7 +32,7 @@ public class InvocationThread extends Thread {
 		while( true ) {
 			try {
 				// Wait for incoming messages				
-				service.acceptOnSecurePipe( serviceSecurePipe );
+				service.acceptSingleThread( serviceSecurePipe );
 					
 			} catch( Exception e ) {
 				e.printStackTrace();

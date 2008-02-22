@@ -42,7 +42,7 @@ public class SOAPServiceThread extends Thread {
 
             try {            
                 System.out.println("-> ServiceThread - START wait in accept(...) - PUBLIC Pipe");
-                service.acceptOnPublicPipe( service.getInputPipe() );
+                service.acceptSingleThread( service.getInputPipe() );
             } catch ( Throwable t ) {
                 
                 t.printStackTrace();

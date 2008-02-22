@@ -341,7 +341,7 @@ public class SOAPService {
 	/**
 	 * Run this JXTA-SOAP service.
 	 */
-	public void acceptOnPublicPipe(InputPipe pipe) throws Exception {
+	public void acceptMultiThread(InputPipe pipe) throws Exception {
 		if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnPublicPipe(...) - waitForMessage()");
@@ -429,7 +429,7 @@ public class SOAPService {
 	/**
 	 * Run this JXTA-SOAP service.
 	 */
-	public void acceptOnSecurePipe(InputPipe pipe) throws Exception {
+	public void acceptSingleThread(InputPipe pipe) throws Exception {
 		System.out
 				.println("-> SOAPService:acceptOnSecurePipe(...) - waitForMessage()");
 		// Listen on the pipe for a client message

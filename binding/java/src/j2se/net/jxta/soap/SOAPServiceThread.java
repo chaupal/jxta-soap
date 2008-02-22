@@ -9,32 +9,31 @@
  *
  */
 
-
 package net.jxta.soap;
 
 import net.jxta.peer.PeerID;
 import net.jxta.pipe.InputPipe;
 
 public class SOAPServiceThread extends Thread {
-    
-    private SOAPService service = null;
-    
-    public SOAPServiceThread( SOAPService service ) {
-	super();
-	this.setDaemon(true);
 
-	this.service = service;
-    }
-    
-    public void run() {	
-	while( true ) {
-	    try {
-		// Wait for incoming messages				
-		service.acceptOnSecurePipe( service.getInputPipe() );		
-	    } 
-	    catch( Throwable t ) {
-		t.printStackTrace();
-	    }
-	}	
-    }
+	private SOAPService service = null;
+
+	public SOAPServiceThread(SOAPService service) {
+		super();
+		this.setDaemon(true);
+
+		this.service = service;
+	}
+
+	public void run() {
+		while (true) {
+			try {
+				// Wait for incoming messages
+				//service.acceptSingleThread(service.getInputPipe());
+				service.acceptMultiThread(service.getInputPipe());
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+	}
 }
