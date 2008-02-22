@@ -35,16 +35,16 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
-public class DeploySOAPService {
+public class SOAPServiceDeployer {
 
-    private final static Logger LOG = Logger.getLogger(DeploySOAPService.class.getName());
+    private final static Logger LOG = Logger.getLogger(SOAPServiceDeployer.class.getName());
     private ServiceDescriptor descriptor = null;
     private String wsdd = null;
     
     /**
      * Create a new <code>DeploySOAPService</code> instance.
      */
-    public DeploySOAPService( ServiceDescriptor descriptor ) {
+    public SOAPServiceDeployer( ServiceDescriptor descriptor ) {
 
         this.descriptor = descriptor;
         
