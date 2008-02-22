@@ -168,10 +168,12 @@ public class SOAPService {
 
 		this.setServiceDescriptor(descriptor);
 
-		// bootstrap axis if it hasn't been done before.
+		// ***CHIARA***
+		// bootstrap Axis if it hasn't been done before.
 		if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - Axis Bootstrap");
 		AXISBootstrap.getInstance().bootstrap();
+		// ***CHIARA***
 
 		this.discSvc = pg.getDiscoveryService();
 		this.pipeSvc = pg.getPipeService();
@@ -194,6 +196,8 @@ public class SOAPService {
 		// re-publish the advertisement every time it expires.
 		msadv = createModuleSpecAdv(mcID, pipeadv, param, servicePolicy);
 		this.advertiseModuleSpec(msadv);
+		
+		/*
 		long exptime = discSvc.getAdvExpirationTime(msadv);
 		System.out.println("Expiration time for module spec adv is " + exptime
 				+ " ms");
@@ -201,14 +205,16 @@ public class SOAPService {
 		advPublishTask = new AdvPublishTask(msadv);
 		publishtimer = new Timer();
 		publishtimer.schedule(advPublishTask, exptime, exptime);
-
+		 */
+		
 		// ok.. deploy this as a SOAP service with Axis
 		if (LOG.isEnabledFor(Level.INFO))
-			System.out
-					.println("-> SOAPService:init() - Deploying SOAP service");
+			System.out.println("-> SOAPService:init() - Deploying SOAP service");
 
+		// ***CHIARA***
 		String wsdd = extractServiceWSDD(param);
-		new DeploySOAPService(descriptor).deploy(wsdd);
+		new SOAPServiceDeployer(descriptor).deploy(wsdd);
+		// ***CHIARA***
 	}
 
 	/**
@@ -504,23 +510,24 @@ public class SOAPService {
 		// ok... now service this...
 		Request request = new Request();
 		request.setMessage(requestMessage);
-		System.out
-				.println("-> SOAPService:invokeService(...) - invoking target service");
-		Response response = service(request);
+		System.out.println("-> SOAPService:invokeService(...) - invoking target service");
+		Response response = this.service(request);
 		if (LOG.isEnabledFor(Level.INFO))
-			System.out
-					.println("-> SOAPService:invokeService(...) - set response message");
+			System.out.println("-> SOAPService:invokeService(...) - set response message");
 
 		ByteArrayMessageElement returnMessageElement = new ByteArrayMessageElement(
 				"message", null, response.getMessage().getBytes(), null);
 		returnMessage.addMessageElement(returnMessageElement);
 
-		System.out
-				.println("-> SOAPService:invokeService(...) - send back response message");
+		System.out.println("-> SOAPService:invokeService(...) - send back response message");
 		output.send(returnMessage);
 		output.close();
 	}
 
+	
+	// ***CHIARA***
+	// ***CHIARA***
+	// ***CHIARA***
 	/**
 	 * Service this a connection (InputPipe and Output pipe)
 	 */
