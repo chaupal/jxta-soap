@@ -180,8 +180,7 @@ public class SOAPService {
 	    }
 	}
 	
-	// Setup a thread to publish the module spec adv immediately, and
-	// re-publish the advertisement every time it expires.
+	// Publish the module spec adv immediately
 	msadv = this.createModuleSpecAdv(mcID, pipeadv, param, servicePolicy);
 	this.advertiseModuleSpec(msadv);
 	
@@ -323,26 +322,36 @@ public class SOAPService {
 	
 	return msadv;
     }
-
+    
     
     /**
-     * New advertiseModuleSpec() method to allow additional service parameters 
+     * New advertiseModuleSpec() method to publish the service adv. 
      */
     private void advertiseModuleSpec( ModuleSpecAdvertisement msadv ) throws IOException{
-	// Ok the Module advertisement was created, just publish
-	// it in my local cache and into the NetPeerGroup.
-	discSvc.publish(msadv);
-	discSvc.remotePublish(msadv);
+    	// Ok the Module advertisement was created, just publish
+    	// it in my local cache and into the NetPeerGroup.
+    	discSvc.publish(msadv);
+    	discSvc.remotePublish(msadv);
 
-	long exptime = discSvc.getAdvExpirationTime(msadv);
-	LOG.info("Expiration time for module spec adv is " + exptime + " ms");
+    	/*
+    	long exptime = discSvc.getAdvExpirationTime(msadv);
+    	LOG.info("Expiration time for module spec adv is " + exptime + " ms");
 	
-	advPublishTask = new AdvPublishTask(msadv);
-	publishtimer = new Timer();
-	publishtimer.schedule(advPublishTask, exptime, exptime);
+    	advPublishTask = new AdvPublishTask(msadv);
+    	publishtimer = new Timer();
+    	publishtimer.schedule(advPublishTask, exptime, exptime);
+    	*/
     }
     
+    
+    public void republish() {
+    	if (this.msadv != null)
+    		this.advertiseModuleSpec(this.msadv);
+    	else
+    		System.out.println("No service to republish!");
+    }
 
+    
     /**
      * Internal class to periodically publish the module spec adv
      * when it expires.
