@@ -103,10 +103,10 @@ public class HelloClient {
                 config.setPeerID(IDFactory.newPeerID(PeerGroupID.defaultNetPeerGroupID));
                 config.setName(instanceName);
                 config.setDescription("Created by ConsumerPeer");
-                if (nodeType.equals("RDV"))
-                	config.setMode(NetworkConfigurator.RDV_NODE);
-                else if (nodeType.equals("EDGE"))
+                if (nodeType.equals("EDGE"))
                 	config.setMode(NetworkConfigurator.EDGE_NODE);
+                else if (nodeType.equals("RDV"))
+                	config.setMode(NetworkConfigurator.RDV_NODE);
                 config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
