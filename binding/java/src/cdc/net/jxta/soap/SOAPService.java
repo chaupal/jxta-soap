@@ -507,11 +507,11 @@ public class SOAPService {
 			throws Exception {
 		net.jxta.endpoint.Message returnMessage = new net.jxta.endpoint.Message();
 
-		// ok... now service this...
+		// ok... now serve this...
 		Request request = new Request();
 		request.setMessage(requestMessage);
 		System.out.println("-> SOAPService:invokeService(...) - invoking target service");
-		Response response = this.service(request);
+		Response response = this.serve(request);
 		if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:invokeService(...) - set response message");
 
@@ -531,7 +531,7 @@ public class SOAPService {
 	/**
 	 * Service this a connection (InputPipe and Output pipe)
 	 */
-	public Response service(Request request) throws Exception {
+	public Response serve(Request request) throws Exception {
 		if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:service(...) - get AxisServer");
 
