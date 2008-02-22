@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="binding/java/examples/basicExample/HelloClient/src"/>
+	<classpathentry kind="src" path="binding/java/examples/basicExample/HelloServer/src"/>
+	<classpathentry kind="src" path="binding/java/examples/defaultMessage/HelloClient/src"/>
+	<classpathentry excluding="src/" kind="src" path="binding/java/examples/defaultMessage/HelloServer"/>
+	<classpathentry kind="src" path="binding/java/examples/defaultMessage/HelloServer/src"/>
+	<classpathentry kind="src" path="binding/java/examples/defaultTransport/HelloClient/src"/>
+	<classpathentry kind="src" path="binding/java/examples/defaultTransport/HelloServer/src"/>
+	<classpathentry kind="src" path="binding/java/src/cdc"/>
+	<classpathentry kind="src" path="binding/java/src/j2se"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/axis.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/saaj.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxme/jxme-cdc.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxme/jxta-tools.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/bcprov-jdk14.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/jdom.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/jxta.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtaext.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtasecurity.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/log4j.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/org.mortbay.jetty.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/jxta/swixml.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/addressing-1.0.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/opensaml-1.0.1.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/wss4j.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/xalan-2.6.0.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/xml-apis.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/wss4j/xmlsec-1.2.1.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/xml-apis.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
