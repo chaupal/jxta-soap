@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!--
-
-$Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
-
--->
-
 <project name="jxta-soap" default="core.j2se" basedir=".">
 
     <property environment="env"/>
@@ -63,7 +57,7 @@ $Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
     </path>
 
     <!-- =================================================================== -->
-    <!-- Handles J2SE compilation                                      		 -->
+    <!-- J2SE compilation		                                      		 -->
     <!-- =================================================================== -->
     <target name="core.j2se">        
         <mkdir dir="${build.dir}"/>
@@ -73,7 +67,9 @@ $Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
         <javac deprecation="yes"
                srcdir="${src.j2se.dir}/" 
                destdir="${build.dest}" 
-               debug="${debug}">
+               debug="${debug}"
+        	   target="1.5"
+        	   source="1.5">
             <compilerarg value="-Xlint"/> 
             <classpath>
                 <fileset dir="./lib/jxta">
@@ -90,7 +86,7 @@ $Id: build.xml,v 1.8 2007/06/04 09:00:09 ardarico Exp $
     </target>
     
     <!-- =================================================================== -->
-    <!-- Handles J2ME CDC compilation                                      -->
+    <!-- J2ME CDC compilation			                                     -->
     <!-- =================================================================== -->
     <property name="cdc_lib" value="${env.CDC_HOME}/lib/btclasses.zip:${env.CDC_HOME}/lib/personal_security.jar:${env.CDC_HOME}/lib/jce.jar"/>
     <property name="log4j" value="lib/jxta/log4j.jar"/>
