@@ -66,7 +66,7 @@ public class HelloServer {
     	System.setProperty("net.jxta.logging.Logging", "OFF");
     	HelloServer providerPeer = new HelloServer("ProviderPeer");
         System.out.println("Starting ProviderPeer ....");
-        providerPeer.start("RDV", "principal", "peerPassword", false);	
+        providerPeer.start("RDV", "principal", "peerPassword", true);	
         providerPeer.authenticateToPSE();
         System.out.println("-------------------------------------------------");
         providerPeer.createSOAPService();
@@ -94,13 +94,15 @@ public class HelloServer {
                 config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
-                try {
-                	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
-                    config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
+                config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt");
+                /*
+                config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
+                try {    
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
-                }                
+                } 
+                */               
                 try {
                     config.save();
                 } catch (IOException io) {
