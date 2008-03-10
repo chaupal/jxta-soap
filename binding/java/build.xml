@@ -7,7 +7,6 @@
     <property name="project.cdc" value="jxme-soap"/>
     <property name="version" value="2.4.1"/>
     <property name="build.dir" value="./build"/>
-    <property name="build.src" value="${build.dir}/src"/>
     <property name="build.dest" value="${build.dir}/classes"/>
     <property name="build.war" value="${build.dir}/war"/>
     <property name="src.j2se.dir" value="./src/j2se"/>
@@ -62,7 +61,6 @@
     <target name="core.j2se">        
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dest}"/>
-        <mkdir dir="${build.src}"/>
         <echo message="Compiling in ${src.j2se.dir} and saving to ${build.dest}"/>
         <javac deprecation="yes"
                srcdir="${src.j2se.dir}/" 
@@ -94,7 +92,6 @@
     <target name="core.cdc">        
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dest}"/>
-        <mkdir dir="${build.src}"/>
         <echo message="Compiling in ${src.cdc.dir} and saving to ${build.dest}"/>
         <echo message="CDC is in ${cdc_lib}"/>
         <echo message="CDC_HOME is ${env.CDC_HOME}"/>
@@ -124,14 +121,13 @@
     <!-- Cleans up the distribution                                          -->
     <!-- =================================================================== -->
     <target name="clean">
-        <delete dir="${build.dir}/src"/>
         <delete dir="${build.dir}/classes"/>
 	    <delete dir="${build.dir}"/>
         <delete file="${project.jar}"/>
         <delete file="${project.war}"/>
     </target>
 
-	<!-- Build API documentation -->
+	<!-- Build API documentation for J2SE version -->
 	  <property name="lib.dir" value="lib"/>
 	  <target name="j2se.javadoc" description="Javadoc for JXTA-SOAP (J2SE version)">
 	    <mkdir dir="${docs.dir}/javadoc"/>
@@ -147,7 +143,7 @@
 	    </javadoc>
 	  </target>
 	  
-	<!-- Build API documentation -->
+	<!-- Build API documentation for J2ME version -->
 	  <property name="lib.dir" value="lib"/>
 	  <target name="cdc.javadoc" description="Javadoc for JXTA-SOAP (J2ME CDC version)">
 	    <mkdir dir="${docs.dir}/javadoc"/>
