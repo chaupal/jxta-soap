@@ -424,6 +424,7 @@ public class HelloClient {
             System.out.println("# Deploy SOAPTransport");    
             new SOAPTransportDeployer().deploy();
         
+            // FIX THIS
             // Write the wsdl to a file. This is needed because of a bug in Axis.
             // The Service constructor in Axis that takes wsdl as an InputStream
             // doesn't work.
@@ -446,11 +447,13 @@ public class HelloClient {
             call.setOperationName( new QName(desc1.getName(), "SayHello"));
             call.setTimeout( new Integer(20000));
         
-            int i = 3;
+            int i = 5;
             while( i-- > 0 ) {
                 System.out.println("# Trying to invoke SOAP service...");
+                long start = System.nanoTime();
                 String res = (String)call.invoke(new Object[] { "Hey JXTA peer!" } );
-                System.out.println(res);
+                long time = System.nanoTime() - start;
+                System.out.println(res + " " + time);
             }
         } catch( Exception e ){
             System.out.println("Error invoking SOAP service!");
