@@ -72,6 +72,6 @@ public class HelloService implements ServiceLifecycle{
     public static String sayHello( String message ) {	
         //System.out.println(" <<< Invocating sayHello() >>>");
         //return "How is it going buddy! - " + message + " Called " + ++counter + " times";
-        return "RESPONSE";
+        return "RES";
     }
 }
