@@ -70,7 +70,7 @@ public class HelloClient {
     	System.setProperty("net.jxta.logging.Logging", "OFF");
     	HelloClient consumerPeer = new HelloClient("ConsumerPeer");
         System.out.println("Starting ConsumerPeer ....");
-        consumerPeer.start("EDGE", "principal", "peerPassword", false);	
+        consumerPeer.start("EDGE", "principal", "peerPassword", true);	
         consumerPeer.authenticateToPSE();
         System.out.println("-------------------------------------------------");
         consumerPeer.findService();
@@ -112,7 +112,7 @@ public class HelloClient {
                 config.setPassword(password);
                 try {
                 	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
-                    config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
+                    //config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
@@ -135,8 +135,8 @@ public class HelloClient {
             System.exit(1);
         }
         started = true;
-        if (nodeType.equals("EDGE") && !multicastOn)
-        	this.waitForRendezvousConnection(5000);
+        if (nodeType.equals("EDGE") && !multicastOn) 
+        	this.waitForRendezvousConnection(1000);
     }
 
     
@@ -150,6 +150,7 @@ public class HelloClient {
         if (!rendezvous.isConnectedToRendezVous() || !rendezvous.isRendezVous()) {
         	int numAttempts = 1;
         	System.out.println(" Waiting to connect to a rendezvous... ");
+        	long startRDVsearch = System.nanoTime();
         	while(!rendezvous.isConnectedToRendezVous()) {
         		try {
         	    	System.out.println("attempt " + numAttempts);
@@ -161,6 +162,8 @@ public class HelloClient {
         	    	System.exit(1);
         	    }
         	}
+           	long timeRDVsearch = System.nanoTime() - startRDVsearch;
+        	System.out.println("Time for discovering a RDV " + timeRDVsearch + " nsec");
         	// Ok, now the peer is connected to a RDV		    
         	System.out.println(" [CONNECTED] in " + numAttempts + " attempts");
         	PeerID rdvId = null;
@@ -295,8 +298,8 @@ public class HelloClient {
     private void findService() {
         System.out.println("\n### Find remote HelloService ###");
 	
-        // Look for printer advertisements
-        discoverServices();
+        // Look for service advertisements
+        this.discoverServices();
 	
         String WSDLbuffer = null;
         // Print out the params of the service advertisement we found
@@ -362,6 +365,7 @@ public class HelloClient {
         System.out.println("Searching for 'HelloService'");
         // Initialize Discovery Service
         DiscoveryService discoverySvc = netPeerGroup.getDiscoveryService();
+        long startSVCsearch = System.nanoTime();
         while( true ) {
             try {
                 System.out.println("Looking for local advertisements...");
@@ -378,8 +382,11 @@ public class HelloClient {
                             ++found;
                         }
                     }
-                    if( found > 0 )
+                    if( found > 0 ) {
+                        long timeSVCsearch = System.nanoTime() - startSVCsearch;
+                        System.out.println("Time for discovering a service " + timeSVCsearch + " nsec");
                         break;
+                    }
                 }
                 System.out.println("Looking for remote advertisements...");
                 discoverySvc.getRemoteAdvertisements(null, 
@@ -448,13 +455,16 @@ public class HelloClient {
             call.setTimeout( new Integer(20000));
         
             int i = 5;
+            long totalTime = 0;
             while( i-- > 0 ) {
                 System.out.println("# Trying to invoke SOAP service...");
                 long start = System.nanoTime();
-                String res = (String)call.invoke(new Object[] { "Hey JXTA peer!" } );
+                String res = (String)call.invoke(new Object[] { "REQ" } );
                 long time = System.nanoTime() - start;
+                totalTime += time;
                 System.out.println(res + " " + time);
             }
+            System.out.println("Average time for invocation: " + totalTime/5 + " nsec");
         } catch( Exception e ){
             System.out.println("Error invoking SOAP service!");
             e.printStackTrace();
