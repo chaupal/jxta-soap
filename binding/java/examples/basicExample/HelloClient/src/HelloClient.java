@@ -32,6 +32,7 @@ import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.NetPeerGroupFactory;
 import net.jxta.peergroup.PeerGroupID;
+import net.jxta.pipe.OutputPipe;
 import net.jxta.platform.NetworkConfigurator;
 import net.jxta.protocol.ModuleImplAdvertisement;
 import net.jxta.protocol.ModuleSpecAdvertisement;
@@ -110,13 +111,15 @@ public class HelloClient {
                 config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
+                config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
+                /*
                 try {
-                	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
-                    //config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
+                    config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                     config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
                 } catch (java.net.URISyntaxException use) {
                     use.printStackTrace();
                 }
+                */
                 try {
                     config.save();
                 } catch (IOException io) {
@@ -136,7 +139,7 @@ public class HelloClient {
         }
         started = true;
         if (nodeType.equals("EDGE") && !multicastOn) 
-        	this.waitForRendezvousConnection(1000);
+        	this.waitForRendezvousConnection(500);
     }
 
     
@@ -358,7 +361,7 @@ public class HelloClient {
      */
     private void discoverServices(){
         int found = 0;
-        int timeout = 3000;     // standard timeout to wait for peers
+        int timeout = 500;    
         Object tempAdv;
         Vector<ModuleSpecAdvertisement> serviceAdvs = new Vector<ModuleSpecAdvertisement>();
     
@@ -449,7 +452,17 @@ public class HelloClient {
                    new String( "HelloService.wsdl" ),                        
                    new QName("http://DefaultNamespace", "HelloServiceService"),  // servicename
                    new QName("http://DefaultNamespace", "HelloService") );       // portname
-        
+            
+            /*
+            Object property = call.getProperty("outputpipe");
+            if (property != null) {
+            	if (property instanceof OutputPipe)
+            		System.out.println("OK property outputpipe");
+            }
+            else
+            	System.out.println("NO property outputpipe");
+             */
+            
             System.out.println("# setOperation: \"SayHello\"");	    
             call.setOperationName( new QName(desc1.getName(), "SayHello"));
             call.setTimeout( new Integer(20000));
