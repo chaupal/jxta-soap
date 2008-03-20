@@ -10,8 +10,10 @@
  */
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import java.io.FileOutputStream;
@@ -71,7 +73,7 @@ public class HelloClient {
     	System.setProperty("net.jxta.logging.Logging", "OFF");
     	HelloClient consumerPeer = new HelloClient("ConsumerPeer");
         System.out.println("Starting ConsumerPeer ....");
-        consumerPeer.start("EDGE", "principal", "peerPassword", true);	
+        consumerPeer.start("EDGE", "principal", "peerPassword", false);	
         consumerPeer.authenticateToPSE();
         System.out.println("-------------------------------------------------");
         consumerPeer.findService();
@@ -434,17 +436,29 @@ public class HelloClient {
             System.out.println("# Deploy SOAPTransport");    
             new SOAPTransportDeployer().deploy();
         
-            // FIX THIS
-            // Write the wsdl to a file. This is needed because of a bug in Axis.
+            // FIXED
+            // Write the wsdl to a file. This was needed because of an old bug in Axis.
             // The Service constructor in Axis that takes wsdl as an InputStream
-            // doesn't work.
+            // did not work. Now it does!
+            /*
             System.out.println("# Write Service WSDL to file");	    
             File wsdlfile = new File("HelloService.wsdl");
             FileOutputStream fos = new FileOutputStream(wsdlfile);
             fos.write( decodedWSDL.getBytes(), 0, (int) decodedWSDL.length() );
             fos.close();
-                
+            */
+            
+            InputStream wsdlInputStream = new ByteArrayInputStream(decodedWSDL.getBytes());
+            
             System.out.println("# Creating Call object");
+            Call call = CallFactory.
+            getInstance().createCall( desc1, 
+               msadv.getPipeAdvertisement(),
+               netPeerGroup,
+               wsdlInputStream,                        
+               new QName("http://DefaultNamespace", "HelloServiceService"),  // servicename
+               new QName("http://DefaultNamespace", "HelloService") );       // portname
+            /*
             Call call = CallFactory.
                 getInstance().createCall( desc1, 
                    msadv.getPipeAdvertisement(),
@@ -452,22 +466,13 @@ public class HelloClient {
                    new String( "HelloService.wsdl" ),                        
                    new QName("http://DefaultNamespace", "HelloServiceService"),  // servicename
                    new QName("http://DefaultNamespace", "HelloService") );       // portname
-            
-            /*
-            Object property = call.getProperty("outputpipe");
-            if (property != null) {
-            	if (property instanceof OutputPipe)
-            		System.out.println("OK property outputpipe");
-            }
-            else
-            	System.out.println("NO property outputpipe");
              */
             
             System.out.println("# setOperation: \"SayHello\"");	    
             call.setOperationName( new QName(desc1.getName(), "SayHello"));
             call.setTimeout( new Integer(20000));
         
-            int i = 5;
+            int i = 1;
             long totalTime = 0;
             while( i-- > 0 ) {
                 System.out.println("# Trying to invoke SOAP service...");
