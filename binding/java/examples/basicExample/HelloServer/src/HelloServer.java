@@ -91,6 +91,8 @@ public class HelloServer {
                 	config.setMode(NetworkConfigurator.EDGE_NODE);
                 else if (nodeType.equals("RDV"))
                 	config.setMode(NetworkConfigurator.RDV_NODE);
+                else if (nodeType.equals("ADHOC"))
+                	config.setMode(NetworkConfigurator.ADHOC_NODE);
                 config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
