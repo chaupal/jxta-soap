@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 JXTA-SOAP Project
+ * Copyright (c) 2008 JXTA-SOAP Project
  *
  * Redistributions in source code form must reproduce the above copyright
  * and this condition. The contents of this file are subject to the

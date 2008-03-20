@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 JXTA-SOAP Project
+ * Copyright (c) 2008 JXTA-SOAP Project
  *
  * Redistributions in source code form must reproduce the above copyright
  * and this condition. The contents of this file are subject to the
@@ -16,6 +16,8 @@ import net.jxta.soap.bootstrap.AXISBootstrap;
 import net.jxta.soap.ServiceDescriptor;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
@@ -126,6 +128,36 @@ public class SOAPServiceDeployer {
             "net.jxta.soap.JXTAEngineConfigurationFactory");
             
             Service service = new Service( wsdlLocation, servicename );
+            
+            return service;
+        
+        } 
+	catch( ServiceException e ) {
+			LOG.fatal("SOAPServiceDeployer.getService() failed", e);
+            System.exit(1);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Get a SOAP Service using WSDL.
+     *
+     * Servicename should have the same namespace as the "targetNamespace"
+     * at the top of the wsdl file.
+     */
+    public Service getService(InputStream wsdlInputStream, QName servicename) {
+        try{
+            if( descriptor.getName() == null ) {
+            	LOG.warn("You must set the classname of the service descriptor" +
+                " in order to use the wsdl-enhanced service");
+                return null;
+            }
+            
+            AxisProperties.setProperty(EngineConfigurationFactory.SYSTEM_PROPERTY_NAME, 
+            "net.jxta.soap.JXTAEngineConfigurationFactory");
+            
+            Service service = new Service( wsdlInputStream, servicename );
             
             return service;
         
