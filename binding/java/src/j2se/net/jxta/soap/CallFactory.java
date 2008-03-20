@@ -15,6 +15,7 @@ package net.jxta.soap;
 import net.jxta.soap.deploy.SOAPServiceDeployer;
 import net.jxta.soap.transport.JXTASOAPTransport;
 
+import java.io.InputStream;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -159,7 +160,8 @@ public class CallFactory {
 
     /**
      * Create a Call object with a pre-existing advertisement.  You will have to
-     * do your own discovery to find this one.
+     * do your own discovery to find this one. The service WSDL file must be locally saved, 
+     * and the path must be passed as String wsdlLocation
      */
     public Call createCall( ServiceDescriptor descriptor,
 							PipeAdvertisement advert,
@@ -177,11 +179,31 @@ public class CallFactory {
 		call = this.processCall( call, descriptor, advert, peergroup );
 		return call;
     }
+    
+    /**
+     * Create a Call object with a pre-existing advertisement. You will have to
+     * do your own discovery to find this one. The service WSDL file must be passed 
+     * as InputStream
+     */    
+    public Call createCall( ServiceDescriptor descriptor,
+			PipeAdvertisement advert,
+			PeerGroup peergroup,
+			InputStream wsdlInputStream,
+			QName servicename,
+			QName portname ) throws Exception {
+
+    	Service service = this.getService( descriptor, wsdlInputStream, servicename );
+
+    	Call call = (Call)service.createCall( portname );
+    	call = this.processCall( call, descriptor, advert, peergroup );
+    	return call;
+    }
 
 
     /**
      * Create a Call object with a pre-existing advertisement.  You will have to
-     * do your own discovery to find this one.
+     * do your own discovery to find this one. The service WSDL file must be locally saved, 
+     * and the path must be passed as String wsdlLocation
      */
     public Call createCall( ServiceDescriptor descriptor,
 							PipeAdvertisement advert,
@@ -198,6 +220,26 @@ public class CallFactory {
     }
     
     /**
+     * Create a Call object with a pre-existing advertisement.  You will have to
+     * do your own discovery to find this one. The service WSDL file must be passed 
+     * as InputStream
+     */
+    public Call createCall( ServiceDescriptor descriptor,
+							PipeAdvertisement advert,
+							PeerGroup peergroup,
+							InputStream wsdlInputStream,
+							QName servicename,
+							QName portname,
+							QName operationName ) throws Exception {
+
+		Service service = this.getService( descriptor, wsdlInputStream, servicename );
+		Call call = (Call)service.createCall( portname, operationName );
+		call = this.processCall( call, descriptor, advert, peergroup );
+		return call;
+    }
+    
+    
+    /**
      * Helper method for the createCall() methods
      */     
     private Service getService( ServiceDescriptor descriptor ) throws Exception {
@@ -211,6 +253,28 @@ public class CallFactory {
 		return service;
     }
 
+    /** 
+     * Helper method for the createCall() methods
+     */      
+    private Service getService( ServiceDescriptor descriptor,
+								InputStream wsdlInputStream,
+								QName servicename) throws Exception {
+		//get the service
+		Service service = services.get( descriptor );
+		
+		if ( service == null ) {
+			LOG.info("Trying to get service with pre-filled wsdl data");
+		
+			// debugging stuff
+			if (wsdlInputStream == null){
+				LOG.info("wsdlInputStream argument is empty!");
+			}
+			
+			service = new SOAPServiceDeployer( descriptor ).getService( wsdlInputStream, servicename );
+			services.put( descriptor, service );
+		}
+		return service;
+    }
 
     /** 
      * Helper method for the createCall() methods
@@ -228,10 +292,6 @@ public class CallFactory {
 			if (wsdlLocation == null){
 				LOG.info("wsdlLocation argument is empty!");
 			}
-			//byte[] temp = new byte[3059];
-			//wsdlLocation.read( temp, 0, 3059 );
-			//String s = new String( temp );
-			//LOG.info( s );
 			
 			service = new SOAPServiceDeployer( descriptor ).getService( wsdlLocation, servicename );
 			services.put( descriptor, service );
@@ -292,19 +352,9 @@ class MSAdvertisementComparator implements Comparator {
         ModuleSpecAdvertisement msa1 = (ModuleSpecAdvertisement)one;
         ModuleSpecAdvertisement msa2 = (ModuleSpecAdvertisement)two;
 	
-        //if msa1 is fresher...
-	
-	//         if ( msa1.getLocalExpirationTime() > msa2.getLocalExpirationTime() ) {
-	//             return -1;
-	//         } else if ( msa1.getLocalExpirationTime() == msa2.getLocalExpirationTime() ) {
-	//             return 0;
-	//         } else {
-	//             return 1;
-	//         }
-	
-	// ModuleSpecAdvertisements don't support the getLocalExpirationTime()
-	// method anymore. Return 0 for equal time.
-	return 0;
+        // ModuleSpecAdvertisements don't support the getLocalExpirationTime()
+        // method anymore. Return 0 for equal time.
+        return 0;
     }
     
     public boolean equals( Object obj ) {
