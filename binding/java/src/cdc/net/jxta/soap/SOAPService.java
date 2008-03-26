@@ -12,7 +12,7 @@
 package net.jxta.soap;
 
 import net.jxta.soap.bootstrap.AXISBootstrap;
-import net.jxta.soap.deploy.DeploySOAPService;
+import net.jxta.soap.deploy.SOAPServiceDeployer;
 import net.jxta.soap.security.policy.Policy;
 import net.jxta.soap.util.URLBase64;
 
@@ -333,7 +333,12 @@ public class SOAPService {
 
 	public void republish() {
 		if (this.msadv != null)
-			this.advertiseModuleSpec(this.msadv);
+			try {
+				this.advertiseModuleSpec(this.msadv);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		else
 			System.out.println("No service to republish!");
 	}
