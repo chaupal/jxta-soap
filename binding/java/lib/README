@@ -1,39 +1,32 @@
 This file details where the jar files are from.
 
 
-From JXTA 2.4.1 (www.jxta.org)
-
+From JXTA 2.5: 
 bcprov-jdk14.jar     
-javax.servlet.jar
-jdom.jar  
-jxtaext.jar 
+javax.servlet.jar 
 jxta.jar  
-log4j.jar       
 org.mortbay.jetty.jar
 swixml.jar
 
+From JXTA security:
+jxtasecurity.jar
 
-from JXME 2.1.3 (jxme.jxta.org)
-
+from JXME 2.1.3: 
 jxme-cdc.jar
 jxta-tools.jar
 
-From JXTA security:
-
-jxtasecurity.jar
-
-
-From Axis 1.2.1 (http://ws.apache.org/axis/, all files in the lib dir)
-
+From Axis 1.4:
 axis.jar  
+axis-ant.jar
 commons-discovery-0.2.jar  
 commons-logging-1.0.4.jar  
-jaxrpc.jar   
+jaxrpc.jar  
+log4j.properties
+log4j-1.2.8.jar 
 saaj.jar  
 wsdl4j-1.5.1.jar
 
-From wss4j 1.1.0 
-
+From wss4j 1.1.0: 
 addressing-1.0.jar  
 commons-codec-1.3.jar  
 opensaml-1.0.1.jar  
