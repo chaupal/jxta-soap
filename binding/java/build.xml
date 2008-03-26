@@ -5,7 +5,7 @@
     <property environment="env"/>
     <property name="project.j2se" value="jxta-soap"/>
     <property name="project.cdc" value="jxme-soap"/>
-    <property name="version" value="2.4.1"/>
+    <property name="version" value="2.5"/>
     <property name="build.dir" value="./build"/>
     <property name="build.dest" value="${build.dir}/classes"/>
     <property name="build.war" value="${build.dir}/war"/>
@@ -15,7 +15,7 @@
     <property name="final.name" value="${project}-${version}"/>
     <property name="final.dir" value="./${final.name}/"/>
     <property name="debug" value="on"/>
-    <property name="year" value="2007"/>
+    <property name="year" value="2008"/>
     <property name="ant.home" value="${ant.home}"/>
     <property name="project.j2se.jar" value="${build.dir}/${project.j2se}.jar"/>
     <property name="project.cdc.jar" value="${build.dir}/${project.cdc}.jar"/>
@@ -47,6 +47,9 @@
         <fileset dir="./lib/jxme">
              <include name="*.jar"/>
         </fileset>
+        <fileset dir="./lib/ksoap2">
+                  <include name="*.jar"/>
+        </fileset>
         <fileset dir="./lib/axis">
              <include name="*.jar"/>
         </fileset>
@@ -66,8 +69,8 @@
                srcdir="${src.j2se.dir}/" 
                destdir="${build.dest}" 
                debug="${debug}"
-        	   target="1.5"
-        	   source="1.5">
+        	   target="1.6"
+        	   source="1.6">
             <compilerarg value="-Xlint"/> 
             <classpath>
                 <fileset dir="./lib/jxta">
@@ -87,8 +90,7 @@
     <!-- J2ME CDC compilation			                                     -->
     <!-- =================================================================== -->
     <property name="cdc_lib" value="${env.CDC_HOME}/lib/btclasses.zip:${env.CDC_HOME}/lib/personal_security.jar:${env.CDC_HOME}/lib/jce.jar"/>
-    <property name="log4j" value="lib/jxta/log4j.jar"/>
-    <property name="xml" value="lib/xml-apis.jar"/>
+    <property name="xml" value="lib/wss4j/xml-apis.jar"/>
     <target name="core.cdc">        
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dest}"/>
@@ -105,10 +107,12 @@
                target="1.1" 
                source="1.3">
             <classpath>
-                <pathelement location="${log4j}"/>
                 <pathelement location="${xml}"/>
                 <fileset dir="./lib/jxme">
                      <include name="*.jar"/>
+                </fileset>
+                <fileset dir="./lib/ksoap2">
+                       <include name="*.jar"/>
                 </fileset>
                 <fileset dir="./lib/axis">
                      <include name="*.jar"/>
@@ -143,7 +147,7 @@
 	    </javadoc>
 	  </target>
 	  
-	<!-- Build API documentation for J2ME version -->
+	<!-- Build API documentation for J2ME CDC version -->
 	  <property name="lib.dir" value="lib"/>
 	  <target name="cdc.javadoc" description="Javadoc for JXTA-SOAP (J2ME CDC version)">
 	    <mkdir dir="${docs.dir}/javadoc"/>
