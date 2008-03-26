@@ -11,7 +11,7 @@ swixml.jar
 From JXTA security:
 jxtasecurity.jar
 
-from JXME 2.1.3: 
+from JXME 2.5: 
 jxme-cdc.jar
 jxta-tools.jar
 
