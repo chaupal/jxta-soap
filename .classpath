@@ -23,7 +23,6 @@
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxta.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtaext.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtasecurity.jar"/>
-	<classpathentry kind="lib" path="binding/java/lib/jxta/log4j.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/org.mortbay.jetty.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/swixml.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/wss4j/addressing-1.0.jar"/>
@@ -36,5 +35,7 @@
 	<classpathentry kind="lib" path="binding/java/lib/wss4j/xmlsec-1.2.1.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/xml-apis.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="binding/java/lib/axis/axis-ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
