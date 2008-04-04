@@ -264,6 +264,7 @@ public class HelloServer {
         // Create the service descriptor
         System.out.println("2 Creating ServiceDescriptor...");
         ServiceDescriptor descriptor = HelloService.DESCRIPTOR;
+        descriptor.addComplexTypeMapping("ArrayList", "java.util.ArrayList");
         descriptor.setTimeout(10000);
         System.out.println( descriptor.toString() );
 
