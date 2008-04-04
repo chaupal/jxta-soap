@@ -42,6 +42,7 @@ public class SOAPServiceDeployer {
     private final static Logger LOG = Logger.getLogger(SOAPServiceDeployer.class.getName());
     private ServiceDescriptor descriptor = null;
     private String wsdd = null;
+    private String beanMappings = new String();
     
     /**
      * Create a new <code>SOAPServiceDeployer</code> instance.
@@ -56,7 +57,15 @@ public class SOAPServiceDeployer {
         //NOTE: by default we allow all methods.  This was easier to do by
         //default because we don't have to use reflection.  Consider changing
         //this in the future
-                
+        
+        for (int i = 0; i < descriptor.getComplexTypeMappingSize(); i++) {
+        	String beanMapping = "         <beanMapping qname=\"" + descriptor.getComplexTypeName(i) 
+        		+ "\" xmlns:myNS=\"" + descriptor.getName() 
+        		+ "\" languageSpecificType=\"java:" + descriptor.getComplexTypePackage(i) + "\"/>\n";
+        	//System.out.println(beanMapping);
+        	this.beanMappings += beanMapping;
+        }
+         
         this.wsdd = "<deployment xmlns=\"" + WSDDConstants.URI_WSDD + "\" " + 
             "            xmlns:java=\"" + WSDDConstants.URI_WSDD_JAVA + "\">\n" +
             "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.transport.JXTASOAPTransportSender\"/>\n" +
@@ -64,9 +73,11 @@ public class SOAPServiceDeployer {
             "     <service name=\"" + descriptor.getName() + "\" provider=\"java:RPC\">\n" +
             "         <parameter name=\"allowedMethods\" value=\"*\"/>\n" +
             "         <parameter name=\"className\" value=\"" + descriptor.getClassname() + "\"/>\n" +
+            this.beanMappings +
             "     </service>\n" +
             "</deployment>";
         
+        System.out.println(this.wsdd);
     }
 
     /**
