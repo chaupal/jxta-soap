@@ -13,6 +13,7 @@
 package net.jxta.soap;
 
 import java.util.Enumeration;
+import java.util.ArrayList;
 
 import net.jxta.document.StructuredTextDocument;
 import net.jxta.document.TextElement;
@@ -35,7 +36,9 @@ public class ServiceDescriptor {
     private String name = null;
     private boolean securityEnabled = false;
     private String policyType = "unset";
-    private String peerGroupID = null;    
+    private String peerGroupID = null; 
+    private ArrayList complexTypeNames = null;
+    private ArrayList complexTypePackages = null;
     
     /**
      * Create a new <code>ServiceDescriptor</code> instance.
@@ -53,6 +56,8 @@ public class ServiceDescriptor {
         this.creator = creator;
         this.specURI = specURI;
         this.description = description;
+        complexTypeNames = new ArrayList();
+        complexTypePackages = new ArrayList();
     }
 
 
@@ -84,6 +89,8 @@ public class ServiceDescriptor {
 	this.securityEnabled = isSecure( msadv );
 	if( policyType != null )
 	    this.policyType = policyType;
+	complexTypeNames = new ArrayList();
+	complexTypePackages = new ArrayList();
     }
     
     /**
@@ -104,6 +111,8 @@ public class ServiceDescriptor {
         this.specURI = specURI;
         this.description = description;
         this.peerGroupID = peerGroupID;
+        complexTypeNames = new ArrayList();
+        complexTypePackages = new ArrayList();
     }
 
     /**
@@ -133,6 +142,8 @@ public class ServiceDescriptor {
         this.securityEnabled = secure;
 	if( policyType != null )
 	    this.policyType = policyType;
+		complexTypeNames = new ArrayList();
+		complexTypePackages = new ArrayList();
     }
 
     /**
@@ -159,21 +170,48 @@ public class ServiceDescriptor {
      * Print out the fields of the ServiceDescriptor
      */     
     public String toString() {
-	return  "--- Service Descriptor ---\n" + 
-	    "Description: " + getDescription() + "\n" + 
-	    "SpecURI: " + getSpecURI() + "\n" + 
-	    "Classname: " + getClassname() + "\n" + 
-	    "Name: " + getName() + "\n" + 
-	    "PeerGroupID: " + getPeerGroupID() + "\n" + 
-	    "PeerGroupName: " + getPeerGroupName() + "\n" + 
-	    "PeerGroupDescription: " + getPeerGroupDescription() + "\n" + 
-	    "Timeout: " + getTimeout() + "\n" + 
-	    "Creator: " + getCreator() + "\n" + 
-	    "Version: " + getVersion() + "\n" + 
-	    "Secure: " + isSecure() + "\n" +
-	    "Policy Type: " + getPolicyType() + "\n" + 
-	    "--------------------------";
+    	
+    	String complexTypeMapping = "Complex type mapping: \n";
+    	for (int i = 0; i < this.getComplexTypeMappingSize(); i++) {
+    		complexTypeMapping += this.getComplexTypeName(i) + "\n";
+    		complexTypeMapping += this.getComplexTypePackage(i) + "\n";
+    	}
+    	
+    	return  "--- Service Descriptor ---\n" + 
+	    	"Description: " + getDescription() + "\n" + 
+	    	"SpecURI: " + getSpecURI() + "\n" + 
+	    	"Classname: " + getClassname() + "\n" + 
+	    	"Name: " + getName() + "\n" + 
+	    	"PeerGroupID: " + getPeerGroupID() + "\n" + 
+	    	"PeerGroupName: " + getPeerGroupName() + "\n" + 
+	    	"PeerGroupDescription: " + getPeerGroupDescription() + "\n" + 
+	    	"Timeout: " + getTimeout() + "\n" + 
+	    	"Creator: " + getCreator() + "\n" + 
+	    	"Version: " + getVersion() + "\n" + 
+	    	"Secure: " + isSecure() + "\n" +
+	    	"Policy Type: " + getPolicyType() + "\n" + 
+	    	complexTypeMapping +
+	    	"--------------------------";
     }	
+    
+    
+    public void addComplexTypeMapping(String complexTypeName, String complexTypePackage) {
+    	complexTypeNames.add(complexTypeName);
+    	complexTypePackages.add(complexTypePackage);
+    }
+       
+    public int getComplexTypeMappingSize() {
+    	return complexTypeNames.size();
+    }
+    
+    public String getComplexTypeName(int i) {
+    	return (String) complexTypeNames.get(i);
+    }
+    
+    public String getComplexTypePackage(int i) {
+    	return (String) complexTypePackages.get(i);
+    }
+    
     
     /**
      * Get the value of <code>description</code>.
