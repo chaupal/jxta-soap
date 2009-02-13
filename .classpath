@@ -19,7 +19,6 @@
 	<classpathentry kind="lib" path="binding/java/lib/jxme/jxta-tools.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/bcprov-jdk14.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/javax.servlet.jar"/>
-	<classpathentry kind="lib" path="binding/java/lib/jxta/jdom.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxta.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtaext.jar"/>
 	<classpathentry kind="lib" path="binding/java/lib/jxta/jxtasecurity.jar"/>
