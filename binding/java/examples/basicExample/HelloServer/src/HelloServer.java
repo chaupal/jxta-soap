@@ -259,7 +259,9 @@ public class HelloServer {
         System.out.println("\nCreate new SOAPService");
         System.out.println("-------------------------------------------");         
         System.out.println("1 Creating new SOAPService instance...");
-        SOAPService service = new SOAPService( userLogLevel );
+        long lifetime = 3600000;
+        long expiration = 3600000;
+        SOAPService service = new SOAPService(userLogLevel, lifetime, expiration); // lifetime and expiration are set to 1h
         
         // Create the service descriptor
         System.out.println("2 Creating ServiceDescriptor...");
