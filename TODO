@@ -1,6 +1,5 @@
 
-- ability to give it a Log4J channel so that we can have our own application
-  logging without using System.out
+- code refactoring.. (also packages should be different depending on J2SE or J2ME version)
 
 - add WSRF support
 
