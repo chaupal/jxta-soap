@@ -7,6 +7,9 @@
  * this file except in compliance with the License.
  * A copy of the License is available at http://www.jxta.org/jxta_license.html.
  *
+ * Author: 
+ * ardarico (michele.amoretti@unipr.it)
+ *
  */
 
 package net.jxta.soap;
@@ -76,24 +79,21 @@ import org.apache.log4j.Logger;
  */
 public class SOAPService {
 
-	private final static Logger LOG = Logger.getLogger(SOAPService.class
-			.getName());
+	private final static Logger LOG = Logger.getLogger(SOAPService.class.getName());
 	private String logLevel = "WARN";
 
 	private LinkedList<InvocationThread> invocationThreadList = new LinkedList<InvocationThread>();
-
 	private HashMap<String, Object> authUsers = new HashMap<String, Object>();
-
 	private LinkedList<PipeAdvertisement> secureInputPipeAdvList = new LinkedList<PipeAdvertisement>();
-
 	private LinkedList<InputPipe> secureInputPipeList = new LinkedList<InputPipe>();
-
 	private PolicyManager policyManager = null;
 	private String policyName = null;
 	private String policyType = null;
 	private Object context = null;
 
 	private ModuleSpecAdvertisement msadv = null;
+	private long lifetime = 3600000; // Duration in relative milliseconds that this advertisement will exist.
+	private long expiration = 3600000; // Duration in relative milliseconds that this advertisement will be cached by other peers.
 	private AdvPublishTask advPublishTask = null;
 	private Timer publishtimer = null;
 	private PeerGroup pg = null;
@@ -112,8 +112,10 @@ public class SOAPService {
 	/**
 	 * Standard constructor
 	 */
-	public SOAPService(String logLevel) {
+	public SOAPService(String logLevel, long lifetime, long expiration) {
 		this.logLevel = logLevel;
+		this.lifetime = lifetime;
+		this.expiration = expiration;
 		LOG.setLevel(Level.toLevel(this.logLevel));
 	}
 
@@ -325,8 +327,10 @@ public class SOAPService {
 			throws IOException {
 		// Ok the Module advertisement was created, just publish
 		// it in my local cache and into the NetPeerGroup.
-		discSvc.publish(msadv);
-		discSvc.remotePublish(msadv);
+		//discSvc.publish(msadv);
+		//discSvc.remotePublish(msadv);
+		discSvc.publish(msadv, lifetime, expiration);
+		discSvc.remotePublish(msadv, expiration);
 
 		/*
 		 * long exptime = discSvc.getAdvExpirationTime(msadv);
