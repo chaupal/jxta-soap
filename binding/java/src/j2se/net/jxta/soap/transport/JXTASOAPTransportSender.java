@@ -60,19 +60,20 @@ public class JXTASOAPTransportSender extends BasicHandler {
                 //get an output pipe to this service from its advertisement.
 		int attempt = 1;
 		boolean redo = true;
+		long timeout = descriptor.getTimeout(); 
 		do {
 		    try {
-		    LOG.info(" -> JXTASOAPTransportSender:invoke(...) - binding op with service ip... (" + attempt + ")");
-			output = peergroup.getPipeService().createOutputPipe( advert, descriptor.getTimeout() );
+		    LOG.info(" -> JXTASOAPTransportSender:invoke(...) - binding op with service ip... (" + attempt + ") timeout: " + timeout);
+			output = peergroup.getPipeService().createOutputPipe( advert, timeout);
 			LOG.info("OK");
 			redo = false;
 		    } catch( Exception e ) {
 		    LOG.warn(" Exception in remote binding phase! TIMEOUT expired!", e);
 			attempt++;
+			timeout = timeout*2;
 		    }
 		} while( redo && attempt < 5 );
-		
-				LOG.info(" -> JXTASOAPTransportSender:invoke(...) - op created of type: " + output.getType() );
+			LOG.info(" -> JXTASOAPTransportSender:invoke(...) - op created of type: " + output.getType() );
             } 
             else
             	LOG.info(" -> JXTASOAPTransportSender:invoke(...) - op yet available");
