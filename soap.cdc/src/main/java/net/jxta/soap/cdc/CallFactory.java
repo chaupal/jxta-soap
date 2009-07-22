@@ -13,13 +13,12 @@
 package net.jxta.soap.cdc;
 
 
-import net.jxta.soap.cdc.transport.KSOAPpipeTransport;
+import net.jxta.soap.cdc.transport.KSoapPipeTransport;
 
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.xml.namespace.QName;
 
 import net.jxta.discovery.DiscoveryService;
 import net.jxta.document.Advertisement;
@@ -31,7 +30,6 @@ import net.jxta.peergroup.PeerGroup;
 import net.jxta.pipe.OutputPipe;
 import net.jxta.protocol.ModuleSpecAdvertisement;
 import net.jxta.protocol.PipeAdvertisement;
-
 
 import org.ksoap2.serialization.*;
 import org.ksoap2.SoapEnvelope;
@@ -235,9 +233,9 @@ public class CallFactory {
  
  
  
- public  KSOAPpipeTransport  getTransport(SoapObject call){
+ public  KSoapPipeTransport  getTransport(SoapObject call){
 	 
-	 KSOAPpipeTransport transportME = new KSOAPpipeTransport();
+	 KSoapPipeTransport transportME = new KSoapPipeTransport();
 	 transportME.getJXTAproperties(call);
 	 return transportME;	 
  }
