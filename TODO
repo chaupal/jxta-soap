@@ -1,12 +1,7 @@
 
-- code refactoring.. (also packages should be different depending on J2SE or J2ME version)
+- switch to axis 2
 
 - add WSRF support
 
-- create a Bootstrap class that uses utility classes.  JXTABootraap,
-  AXISBootsrap... should be in a dedicated bootstrap package.
 
-    - all these should be in an net.jxta.soap.boostrap package.
-
-- Make a WSDL2Java version that creates JXTA-SOAP client stubs.
 

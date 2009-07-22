@@ -1,16 +1,15 @@
-To compile: 
 
-cd binding/java
+To compile JXTA-SOAP J2SE version: 
 
-JXTA-SOAP based on JXTA J2SE:
-ant core.j2se
-ant jar.j2se
+cd trunk/soap.j2se/src
+ant soap.j2se
+ant soap.j2se.jar
 
-These commands generate jxtasoap.jar
+These commands generate soap.j2se.jar
 
 
-A good starting point to see how things work is the basicExample in
-binding/java/examples directory.
+A good starting point to see how things work is the basic.example in
+trunk/examples directory.
 
 
 Michele Amoretti (ardarico)
