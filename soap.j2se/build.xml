@@ -1,184 +1,86 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="jxta-soap" default="core.j2se" basedir=".">
+<project name="jxta-soap" default="soap.j2se" basedir=".">
 
     <property environment="env"/>
-    <property name="project.j2se" value="jxta-soap"/>
-    <property name="project.cdc" value="jxme-soap"/>
+    <property name="project" value="soap.j2se"/>
     <property name="version" value="2.5"/>
+    <property name="lib.dir" value="../lib"/>
     <property name="build.dir" value="./build"/>
     <property name="build.dest" value="${build.dir}/classes"/>
     <property name="build.war" value="${build.dir}/war"/>
-    <property name="src.j2se.dir" value="./src/j2se"/>
-    <property name="src.cdc.dir" value="./src/cdc"/>
+    <property name="src.dir" value="./src/main/java"/>
     <property name="docs.dir" value="./docs"/>
-    <property name="final.name" value="${project}-${version}"/>
-    <property name="final.dir" value="./${final.name}/"/>
     <property name="debug" value="on"/>
-    <property name="year" value="2008"/>
     <property name="ant.home" value="${ant.home}"/>
-    <property name="project.j2se.jar" value="${build.dir}/${project.j2se}.jar"/>
-    <property name="project.cdc.jar" value="${build.dir}/${project.cdc}.jar"/>
-
-    <property name="docs.dest" value="./site"/>
-    <property name="docs.src" value="./xdocs"/>
-    
-    <!-- Holds all the files that a full package should contain.-->
-    <property name="distribution.contents" value="src/*,build/*,docs/*,xdocs/*,lib/*,bin/${project}.jar"/>
-
-    <!-- Build the J2SE project classpath from the ../lib directory -->
-    <path id="project.j2se.classpath">
-        <fileset dir="./lib/jxta">
-             <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./lib/axis">
-             <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./lib/wss4j">
-             <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./bin">
-             <include name="*.jar"/>
-        </fileset>
-    </path>
-    
-    <!-- Build the J2ME CDC project classpath from the ../lib directory -->
-    <path id="project.cdc.classpath">
-        <fileset dir="./lib/jxme">
-             <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./lib/ksoap2">
-                  <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./lib/axis">
-             <include name="*.jar"/>
-        </fileset>
-        <fileset dir="./bin">
-             <include name="*.jar"/>
-        </fileset>
-    </path>
+    <property name="project.jar" value="${build.dir}/${project}-${version}.jar"/>
 
     <!-- =================================================================== -->
     <!-- J2SE compilation		                                      		 -->
     <!-- =================================================================== -->
-    <target name="core.j2se">        
+    <target name="soap.j2se">        
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dest}"/>
-        <echo message="Compiling in ${src.j2se.dir} and saving to ${build.dest}"/>
+        <echo message="Compiling in ${src.dir} and saving to ${build.dest}"/>
         <javac deprecation="yes"
-               srcdir="${src.j2se.dir}/" 
+               srcdir="${src.dir}/" 
                destdir="${build.dest}" 
                debug="${debug}"
         	   target="1.6"
         	   source="1.6">
             <compilerarg value="-Xlint"/> 
             <classpath>
-                <fileset dir="./lib/jxta">
+                <fileset dir="../lib/jxse">
                      <include name="*.jar"/>
                 </fileset>
-                <fileset dir="./lib/axis">
+                <fileset dir="../lib/axis">
                      <include name="*.jar"/>
                 </fileset>
-                <fileset dir="./lib/wss4j">
+                <fileset dir="../lib/wss4j">
                      <include name="*.jar"/>
                 </fileset>
             </classpath>
         </javac>
+    </target>
+
+	<!-- =================================================================== -->
+	<!-- Build API documentation for J2SE version 							 -->
+	<!-- =================================================================== -->
+	<target name="project.javadoc" description="Javadoc for JXTA-SOAP (J2SE version)">
+	    <mkdir dir="${docs.dir}/javadoc"/>
+	    <javadoc destdir="${docs.dir}/javadoc">
+	      <fileset dir="${src.dir}"/>
+	      <classpath>
+	        <pathelement location="${lib.dir}"/>
+	        <fileset dir="${lib.dir}">
+	          <include name="**/*.jar"/>
+	        </fileset>
+	        <pathelement location="${build.dir}"/>
+	      </classpath>
+	    </javadoc>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Build jar for J2SE version 							             -->
+	<!-- =================================================================== -->
+    <target name="project.jar">
+        <echo message="Building jar file..."/>
+        <jar jarfile="${project.jar}"
+             compress="false"
+             update="no"
+             basedir="${build.dest}"
+             includes="**"/>
     </target>
     
     <!-- =================================================================== -->
-    <!-- J2ME CDC compilation			                                     -->
-    <!-- =================================================================== -->
-    <property name="cdc_lib" value="${env.CDC_HOME}/lib/btclasses.zip:${env.CDC_HOME}/lib/personal_security.jar:${env.CDC_HOME}/lib/jce.jar"/>
-    <property name="xml" value="lib/wss4j/xml-apis.jar"/>
-    <target name="core.cdc">        
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.dest}"/>
-        <echo message="Compiling in ${src.cdc.dir} and saving to ${build.dest}"/>
-        <echo message="CDC is in ${cdc_lib}"/>
-        <echo message="CDC_HOME is ${env.CDC_HOME}"/>
-        <javac srcdir="${src.cdc.dir}" 
-               bootclasspath="${cdc_lib}"
-               destdir="${build.dest}" 
-               debug="${debug}"
-               optimize="${optimize}" 
-               includeAntRuntime="false" 
-               deprecation="false" 
-               target="1.1" 
-               source="1.3">
-            <classpath>
-                <pathelement location="${xml}"/>
-                <fileset dir="./lib/jxme">
-                     <include name="*.jar"/>
-                </fileset>
-                <fileset dir="./lib/ksoap2">
-                       <include name="*.jar"/>
-                </fileset>
-                <fileset dir="./lib/axis">
-                     <include name="*.jar"/>
-                </fileset>
-            </classpath>
-        </javac>
-    </target>
-        
-    <!-- =================================================================== -->
-    <!-- Cleans up the distribution                                          -->
+    <!-- Clean up the distribution                                           -->
     <!-- =================================================================== -->
     <target name="clean">
         <delete dir="${build.dir}/classes"/>
 	    <delete dir="${build.dir}"/>
+	    <delete dir="${docs.dir}/javadoc"/>
+	    <delete dir="${docs.dir}"/>
         <delete file="${project.jar}"/>
-        <delete file="${project.war}"/>
-    </target>
-
-	<!-- Build API documentation for J2SE version -->
-	  <property name="lib.dir" value="lib"/>
-	  <target name="j2se.javadoc" description="Javadoc for JXTA-SOAP (J2SE version)">
-	    <mkdir dir="${docs.dir}/javadoc"/>
-	    <javadoc destdir="${docs.dir}/javadoc">
-	      <fileset dir="${src.j2se.dir}"/>
-	      <classpath>
-	        <pathelement location="${lib.dir}"/>
-	        <fileset dir="${lib.dir}">
-	          <include name="**/*.jar"/>
-	        </fileset>
-	        <pathelement location="${build.dir}"/>
-	      </classpath>
-	    </javadoc>
-	  </target>
-	  
-	<!-- Build API documentation for J2ME CDC version -->
-	  <property name="lib.dir" value="lib"/>
-	  <target name="cdc.javadoc" description="Javadoc for JXTA-SOAP (J2ME CDC version)">
-	    <mkdir dir="${docs.dir}/javadoc"/>
-	    <javadoc destdir="${docs.dir}/javadoc">
-	      <fileset dir="${src.cdc.dir}"/>
-	      <classpath>
-	        <pathelement location="${lib.dir}"/>
-	        <fileset dir="${lib.dir}">
-	          <include name="**/*.jar"/>
-	        </fileset>
-	        <pathelement location="${build.dir}"/>
-	      </classpath>
-	    </javadoc>
-	  </target>	  
-
-    <target name="jar.j2se">
-        <echo message="Building jar file..."/>
-        <jar jarfile="${project.j2se.jar}"
-             compress="false"
-             update="no"
-             basedir="${build.dest}"
-             includes="**"/>
-    </target>
-    
-    <target name="jar.cdc">
-        <echo message="Building jar file..."/>
-        <jar jarfile="${project.cdc.jar}"
-             compress="false"
-             update="no"
-             basedir="${build.dest}"
-             includes="**"/>
     </target>
     
 </project>
