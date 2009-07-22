@@ -8,7 +8,6 @@
     <property name="lib.dir" value="../lib"/>
     <property name="build.dir" value="./build"/>
     <property name="build.dest" value="${build.dir}/classes"/>
-    <property name="build.war" value="${build.dir}/war"/>
     <property name="src.dir" value="./src/main/java"/>
     <property name="docs.dir" value="./docs"/>
     <property name="debug" value="on"/>
