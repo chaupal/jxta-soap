@@ -12,8 +12,8 @@
 
 package net.jxta.soap.j2se;
 
-import net.jxta.soap.deploy.SOAPServiceDeployer;
-import net.jxta.soap.transport.JXTASOAPTransport;
+import net.jxta.soap.j2se.deploy.SOAPServiceDeployer;
+import net.jxta.soap.j2se.transport.JXTASOAPTransport;
 
 import java.io.InputStream;
 import java.util.Comparator;

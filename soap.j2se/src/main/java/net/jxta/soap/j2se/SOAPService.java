@@ -14,13 +14,13 @@
 
 package net.jxta.soap.j2se;
 
-import net.jxta.soap.bootstrap.AXISBootstrap;
-import net.jxta.soap.deploy.SOAPServiceDeployer;
-import net.jxta.soap.security.certificate.ServiceCertificateManager;
-import net.jxta.soap.security.policy.Policy;
-import net.jxta.soap.security.policy.PolicyManager;
-import net.jxta.soap.security.policy.transport.*;
-import net.jxta.soap.security.policy.message.*;
+import net.jxta.soap.j2se.bootstrap.AXISBootstrap;
+import net.jxta.soap.j2se.deploy.SOAPServiceDeployer;
+import net.jxta.soap.j2se.security.certificate.ServiceCertificateManager;
+import net.jxta.soap.j2se.security.policy.Policy;
+import net.jxta.soap.j2se.security.policy.PolicyManager;
+import net.jxta.soap.j2se.security.policy.*;
+import net.jxta.soap.j2se.security.policy.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
