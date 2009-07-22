@@ -15,20 +15,13 @@ package net.jxta.soap.j2se.security.policy;
 import net.jxta.soap.j2se.security.policy.Policy;
 import net.jxta.soap.j2se.security.wss4j.WSSecurity;
 
-import java.io.StringReader;
-import java.util.Enumeration;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
  
-import net.jxta.document.AdvertisementFactory;
-import net.jxta.document.Attribute;
-import net.jxta.document.Element;
 import net.jxta.document.MimeMediaType;
 import net.jxta.document.StructuredDocument;
 import net.jxta.document.StructuredDocumentFactory;
 import net.jxta.document.TextElement;
-import net.jxta.document.XMLElement;
-import net.jxta.protocol.PeerAdvertisement;
 
 import org.apache.axis.Message;
 import org.apache.axis.AxisFault;

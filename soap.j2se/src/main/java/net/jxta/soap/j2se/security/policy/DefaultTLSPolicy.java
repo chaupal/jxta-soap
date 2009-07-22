@@ -89,7 +89,7 @@ public class DefaultTLSPolicy implements Policy {
 	    throw new IllegalArgumentException( "Could not construct : "
 					+ "authRequest from doc containing a " + doctype );
 	
-	Enumeration elements = doc.getChildren();	
+	Enumeration<XMLElement> elements = (Enumeration<XMLElement>) doc.getChildren();	
 	while (elements.hasMoreElements()) {
 	    XMLElement elem = (XMLElement) elements.nextElement();		    
 	    if( !handleElement( elem, params ) ) {

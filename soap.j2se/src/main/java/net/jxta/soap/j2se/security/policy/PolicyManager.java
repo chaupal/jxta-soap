@@ -12,15 +12,9 @@
 
 package net.jxta.soap.j2se.security.policy;
 
-import net.jxta.soap.j2se.security.policy.transport.*;
-import net.jxta.soap.j2se.security.policy.message.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import net.jxta.document.Element;
-import net.jxta.document.XMLElement;
-import net.jxta.protocol.PeerAdvertisement;
 
 /**
  * This class handles service invocation security policies.
