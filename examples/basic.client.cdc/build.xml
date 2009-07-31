@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="HelloClientCDC" default="build" basedir=".">
+
+  <!-- Sources locations for build -->
+  <property name="src.dir" value="src"/>
+  <property name="examples.dir" value="examples"/>
+
+  <!-- Libraries location for build -->
+  <property name="lib.dir" value="../../../lib"/>
+  <property name="libsoap" value="../../soap.cdc/build/soap.cdc-2.5.jar"/>
+  <property name="libaxis.dir" value="../../lib/axis"/> 
+  <property name="libjxme.dir" value="../../lib/jxme"/>
+  <property name="libksoap2.dir" value="../../lib/ksoap2"/>
+  <property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>
+
+  <!-- Location for the execution -->
+  <property name="build.dir" value="build"/>
+
+  <!-- Temporary locations for build -->
+  <property name="docs.dir" value="docs"/>
+
+  <!-- Conditions for compiling examples -->
+  <target name="init" />
+
+
+  <!-- Compile -->
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac debug="on" deprecation="on" destdir="${build.dir}"  target="1.1"  source="1.3">
+      <compilerarg value="-Xlint" />
+      <src path="${src.dir}" />
+      <classpath>
+        <pathelement location="${libjxme.dir}"/>
+        <pathelement location="${libsoap}"/>
+      	<pathelement location="${log4j}"/>
+        <fileset dir="${libjxme.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+      	 <fileset dir="${libksoap2.dir}">
+      	          <include name="**/*.jar"/>
+      	        </fileset>
+        <pathelement location="${classes.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+
+
+  <!-- Run peer -->
+  <target name="run_client">
+    <delete dir=".jxta/cm"/>
+    <delete file=".jxta/PlatformConfig"/>
+    <delete file=".jxta/jxta.properties"/>
+    <java classname="HelloClientCDC" fork="true">
+    <arg value="WARN"/>
+    <classpath>
+    	<!--  <pathelement location="${libaxis.dir}"/>  -->
+      <pathelement location="${libjxme.dir}"/>
+      <pathelement location="${libsoap}"/>
+    	<pathelement location="${log4j}"/>
+    	<!--     <fileset dir="${libaxis.dir}">
+          <include name="**/*.jar"/>
+        </fileset>   -->
+        <fileset dir="${libjxme.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+     	 <fileset dir="${libksoap2.dir}">
+     	          <include name="**/*.jar"/>
+     	        </fileset>
+      <pathelement location="${build.dir}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- Build documentation -->
+  <target name="javadoc" description="Javadoc for application">
+    <mkdir dir="${docs.dir}/javadoc"/>
+    <javadoc destdir="${docs.dir}/javadoc">
+      <fileset dir="${src.dir}"/>
+      <classpath>
+        <pathelement location="${lib.dir}"/>
+        <fileset dir="${lib.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>
+      </classpath>
+    </javadoc>
+  </target>
+
+
+  <!-- Clean -->
+  <target name="clean">
+    <!--delete dir="classes"/--> 
+    <delete dir="build"/>
+    <delete dir="docs/javadoc"/>
+    <delete dir=".jxta/ConsumerPeer/cm"/>
+    <delete dir=".jxta/ConsumerPeer"/>
+    <delete file=".jxta/ConsumerPeer/config.properties"/>
+    <delete file=".jxta/ConsumerPeer/PlatformConfig"/>
+    <delete file=".jxta/ConsumerPeer/jxta.properties"/>
+  	<delete dir=".jxta"/>
+    <delete file="HelloService.wsdl"/>
+    <delete file="server-config.wsdd"/>
+    <delete file="ServiceParm.xml"/>
+  </target>
+
+    <target name="jar.cdc">
+        <echo message="Building jar file..."/>
+        <jar jarfile="HelloClientCDC.jar"
+             compress="false"
+             update="no"
+             basedir="${build.dir}"
+             includes="**"/>
+    </target>
+
+  <target depends="compile" description="Build hello client for CDC" name="build"/>
+  <target depends="run_client" description="Run hello client for CDC" name="run"/>
+  <target depends="javadoc" name="doc"/>
+  <target depends="clean" description="Clean all" name="clear"/>
+
+</project>
+
