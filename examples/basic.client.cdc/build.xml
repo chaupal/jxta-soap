@@ -7,7 +7,7 @@
   <property name="examples.dir" value="examples"/>
 
   <!-- Libraries location for build -->
-  <property name="lib.dir" value="../../../lib"/>
+  <property name="lib.dir" value="../../lib"/>
   <property name="libsoap" value="../../soap.cdc/build/soap.cdc-2.5.jar"/>
   <property name="libaxis.dir" value="../../lib/axis"/> 
   <property name="libjxme.dir" value="../../lib/jxme"/>
