@@ -1,31 +1,31 @@
 
 
 
-All three directories contain the HelloServer/HelloClient example,
+All three directories contain the HelloService example,
 with the following differences:
 
-basicExample ---> no security
+basic ---> no security
 
-defaultMessage ---> message-level security (WSS)
+wss ---> message-level security (WSS)
 
-defaultTransport ---> transport-level security (TLS)
+tls ---> transport-level security (TLS)
 
 
-You have to run the HelloServer and HelloClient on different machines. 
+You have to run the HelloServer and HelloClient on different machines 
+(or the same machine, but on different ports). 
 The server is configured as a Rendezvous, while the client is an Edge 
-and should connect to the former. The XML profiles (rdvProfile.xml and 
-edgeProfile.xml) contain a reference to an example rendezvous list:
+and should connect to the former. 
 
-<rendezVous bootstrap="http://dsg.ce.unipr.it/research/SP2A/exampleRdvList.txt" discovery="false">
+Edit the line of code:
 
-Edit this line to use your list of rendezvous (which must include the HelloServer), 
-which can also be local to the peers and not online:
+config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist2.txt"); 
 
-<rendezVous bootstrap="file://yourRdvList.txt" discovery="false">
+to use your own list of hosts running rendezvous peers 
+(which must include the host running the HelloServer, of course).
 
 Note that both server and client create a private NetPeerGroup (see .jxta/config.properties), 
 and the public rendezvous list provided by JXTA official servers is not used.
 
 
 
-Michele Amoretti    amoretti@ce.unipr.it
+Michele Amoretti (ardarico)   michele.amoretti@unipr.it
