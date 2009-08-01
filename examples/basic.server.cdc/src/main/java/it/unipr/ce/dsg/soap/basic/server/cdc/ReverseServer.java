@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
+//import java.net.URI;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 //import jxta.security.util.URLBase64;
 
-import net.jxta.credential.AuthenticationCredential;
-import net.jxta.credential.Credential;
+//import net.jxta.credential.AuthenticationCredential;
+//import net.jxta.credential.Credential;
 import net.jxta.document.Element;
 import net.jxta.document.MimeMediaType;
 import net.jxta.document.StructuredDocumentFactory;
@@ -26,17 +26,18 @@ import net.jxta.peergroup.PeerGroupFactory;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.platform.NetworkConfigurator;
-import net.jxta.protocol.ModuleImplAdvertisement;
+//import net.jxta.protocol.ModuleImplAdvertisement;
 
 import net.jxta.rendezvous.RendezVousService;
 import net.jxta.soap.cdc.ServiceDescriptor;
 import net.jxta.soap.cdc.SOAPServiceThread;
 import net.jxta.soap.cdc.SOAPService;
+import net.jxta.soap.cdc.util.Base64;
 
 import it.polimi.si.mas.services.*;
-import org.ksoap2.serialization.*;
-import org.ksoap2.*;
-import org.ksoap2.transport.*;
+//import org.ksoap2.serialization.*;
+//import org.ksoap2.*;
+//import org.ksoap2.transport.*;
 
 public class ReverseServer {
 
