@@ -40,6 +40,7 @@ import net.jxta.soap.cdc.CallFactory;
 //import net.jxta.soap.deploy.SOAPTransportDeployer;
 import net.jxta.soap.cdc.ServiceDescriptor;
 import net.jxta.soap.cdc.transport.KSoapPipeTransport;
+import net.jxta.soap.cdc.util.Base64;
 
 //import org.apache.axis.client.Call;   
 import org.ksoap2.serialization.*;
