@@ -3,7 +3,7 @@
 <project name="ReverseServer" default="build" basedir=".">
 
   <!-- Sources locations for build -->
-  <property name="src.dir" value="src"/>
+  <property name="src.dir" value="src/main/java"/>
   <property name="examples.dir" value="examples"/>
 
   <!-- Libraries location for build -->
