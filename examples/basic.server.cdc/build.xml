@@ -60,7 +60,7 @@
     <delete dir=".jxta/cm"/>
     <delete file=".jxta/PlatformConfig"/>
     <delete file=".jxta/jxta.properties"/>
-    <java classname="ReverseServer" fork="true">
+    <java classname="it.unipr.ce.dsg.soap.basic.server.cdc.ReverseServer" fork="true">
     <arg value="INFO"/>
     <classpath>
       <pathelement location="${libmas.dir}"/>
