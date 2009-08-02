@@ -7,14 +7,14 @@
   <property name="examples.dir" value="examples"/>
 
   <!-- Libraries location for build -->
-  <property name="lib.dir" value="../../../lib"/>
-  <property name="libsoap" value="../../../build/jxme-soap.jar"/>
-  <property name="libmas.dir" value="../../../lib/MAS"/>
+  <property name="lib.dir" value="../../lib"/>
+  <property name="libsoap" value="../../soap.cdc/build/soap.cdc-2.5.jar"/>
+  <property name="libmas.dir" value="../../lib/mas"/>
 
-   <property name="libjxme.dir" value="../../../lib/jxme"/>
-	<property name="libksoap2.dir" value="../../../lib/ksoap2"/>
-		<property name="log4j" value="../../../lib/axis/log4j-1.2.8.jar"/>	
-	<property name="libbase64.dir" value="../../../lib/base64.jar"/>
+   <property name="libjxme.dir" value="../../lib/jxme"/>
+	<property name="libksoap2.dir" value="../../lib/ksoap2"/>
+		<property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>	
+ <!--	<property name="libbase64.dir" value="../../lib/base64.jar"/>   -->
   <!-- Location for the execution -->
   <property name="build.dir" value="build"/>
 
