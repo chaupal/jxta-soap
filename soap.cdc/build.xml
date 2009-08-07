@@ -42,6 +42,9 @@
                 <fileset dir="../lib/ksoap2">
                        <include name="*.jar"/>
                 </fileset>
+                <fileset dir="../lib/mas">
+                     <include name="*.jar"/>
+                </fileset>
                 <fileset dir="../lib/axis">
                      <include name="*.jar"/>
                 </fileset>

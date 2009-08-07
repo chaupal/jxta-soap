@@ -11,15 +11,22 @@
 
 package net.jxta.soap.cdc;
 
-import net.jxta.soap.cdc.bootstrap.AXISBootstrap;
-import net.jxta.soap.cdc.deploy.SOAPServiceDeployer;
+//import net.jxta.soap.bootstrap.AXISBootstrap;
+//import net.jxta.soap.deploy.SOAPServiceDeployer;
 import net.jxta.soap.cdc.security.policy.Policy;
 import net.jxta.soap.cdc.util.URLBase64;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.security.cert.X509Certificate;
 import java.lang.Exception;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,6 +39,7 @@ import net.jxta.document.Element;
 import net.jxta.document.MimeMediaType;
 import net.jxta.document.StructuredDocument;
 import net.jxta.document.StructuredDocumentFactory;
+import net.jxta.document.StructuredDocumentUtils;
 import net.jxta.document.StructuredTextDocument;
 import net.jxta.document.TextElement;
 import net.jxta.document.XMLDocument;
@@ -40,6 +48,7 @@ import net.jxta.endpoint.ByteArrayMessageElement;
 import net.jxta.endpoint.InputStreamMessageElement;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.document.LiteXMLDocument;
+import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.pipe.InputPipe;
@@ -51,14 +60,17 @@ import net.jxta.protocol.ModuleSpecAdvertisement;
 import net.jxta.protocol.PeerAdvertisement;
 import net.jxta.protocol.PipeAdvertisement;
 
-import org.apache.axis.AxisFault;
-import org.apache.axis.Constants;
-import org.apache.axis.Message;
-import org.apache.axis.MessageContext;
-import org.apache.axis.server.AxisServer;
+import it.polimi.si.mas.server.*;
+import it.polimi.si.mas.message.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.*;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.kxml2.io.KXmlParser;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * The SOAPService class supports a mechanism for deploying JXTA services and
@@ -78,7 +90,7 @@ public class SOAPService {
 	private LinkedList secureInputPipeAdvList = new LinkedList();
 
 	private LinkedList secureInputPipeList = new LinkedList();
-
+	private ServerBootstrap mas = new  ServerBootstrap();
 	// private PolicyManager policyManager = null;
 	private String policyName = null;
 	private String policyType = null;
@@ -165,23 +177,35 @@ public class SOAPService {
 
 		this.setServiceDescriptor(descriptor);
 
-		// ***CHIARA***
+//TODO sostituire il bootstrap di Axis con il server MAS ?
+	//	ServerBootstrap mas = new ServerBootstrap();
+		//mas.startServer();
+		Thread t = new Thread(new Runnable(){
+			public void run(){
+		mas.startServer();
+			}
+		}
+		);
+		t.start();
+		
+		
+		
 		// bootstrap Axis if it hasn't been done before.
-		if (LOG.isEnabledFor(Level.INFO))
+/*		if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - Axis Bootstrap");
-		AXISBootstrap.getInstance().bootstrap();
-		// ***CHIARA***
+		AXISBootstrap.getInstance().bootstrap();   */
+
 
 		this.discSvc = pg.getDiscoveryService();
 		this.pipeSvc = pg.getPipeService();
 
 		// advertise this service an its input pipe..
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - advertisePublicPipe()");
 		PipeAdvertisement pipeadv = this.advertisePublicPipe();
 
 		// create service advertisement.
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:init() - advertiseModuleClass()");
 		ModuleClassID mcID = advertiseModuleClass();
@@ -205,15 +229,17 @@ public class SOAPService {
 		 */
 		
 		// ok.. deploy this as a SOAP service with Axis
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - Deploying SOAP service");
 
+//TODO : estrarre il wsdd e fare il deploy--> con MAS la procedura è manuale
 		// ***CHIARA***
-		String wsdd = extractServiceWSDD(param);
-		new SOAPServiceDeployer(descriptor).deploy(wsdd);
+/*		String wsdd = extractServiceWSDD(param);
+		new SOAPServiceDeployer(descriptor).deploy(wsdd);  */
 		// ***CHIARA***
 	}
 
+	
 	/**
 	 * Extract the service deployment descriptor from msadv Parm section
 	 */
@@ -329,14 +355,13 @@ public class SOAPService {
 	}
 
 	public void republish() {
-		if (this.msadv != null)
+		if (this.msadv != null) {
 			try {
 				this.advertiseModuleSpec(this.msadv);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
-		else
+		} else
 			System.out.println("No service to republish!");
 	}
 
@@ -344,7 +369,7 @@ public class SOAPService {
 	 * Run this JXTA-SOAP service.
 	 */
 	public void acceptMultiThread(InputPipe pipe) throws Exception {
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnPublicPipe(...) - waitForMessage()");
 		// Listen on the pipe for a client message
@@ -355,7 +380,7 @@ public class SOAPService {
 		// Read the message as
 		ByteArrayMessageElement msgString = (ByteArrayMessageElement) msg
 				.getMessageElement("message");
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnPublicPipe(...) - get 'message' element: \n"
 							+ msgString.toString());
@@ -366,7 +391,7 @@ public class SOAPService {
 
 		ByteArrayMessageElement remoteInputPipeAdvertisement = (ByteArrayMessageElement) msg
 				.getMessageElement("remote-input-pipe");
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnPublicPipe(...) - get 'remote-input-pipe' element: \n"
 							+ remoteInputPipeAdvertisement.toString());
@@ -383,7 +408,7 @@ public class SOAPService {
 		PipeAdvertisement rpa = (PipeAdvertisement) AdvertisementFactory
 				.newAdvertisement((XMLElement) rpaDoc);
 
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("Client PeerID: " + rpa.getDescription());
 
 		// bind an output pipe back.. It is important to do this BEFORE we call
@@ -407,7 +432,8 @@ public class SOAPService {
 			} catch (Exception e) {
 				System.err
 						.println(" Exception in remote binding phase! TIMEOUT expired!");
-				if (LOG.isEnabledFor(Level.WARN)) {
+		//		if (LOG.isEnabledFor(Level.WARN)) 
+				{
 					e.printStackTrace();
 				}
 				attempt++;
@@ -443,14 +469,14 @@ public class SOAPService {
 		// Read the message as
 		ByteArrayMessageElement msgString = (ByteArrayMessageElement) msg
 				.getMessageElement("message");
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'message' element: \n"
 							+ msgString.toString());
 
 		ByteArrayMessageElement remoteInputPipeAdvertisement = (ByteArrayMessageElement) msg
 				.getMessageElement("remote-input-pipe");
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
 					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'remote-input-pipe' element: \n"
 							+ remoteInputPipeAdvertisement.toString());
@@ -488,7 +514,8 @@ public class SOAPService {
 			} catch (Exception e) {
 				System.err
 						.println(" Exception in remote binding phase! TIMEOUT expired!");
-				if (LOG.isEnabledFor(Level.WARN)) {
+		//		if (LOG.isEnabledFor(Level.WARN)) 
+				{
 					e.printStackTrace();
 				}
 				attempt++;
@@ -508,13 +535,14 @@ public class SOAPService {
 	private void invokeService(OutputPipe output, String requestMessage)
 			throws Exception {
 		net.jxta.endpoint.Message returnMessage = new net.jxta.endpoint.Message();
-
+		
 		// ok... now serve this...
+		
 		Request request = new Request();
 		request.setMessage(requestMessage);
 		System.out.println("-> SOAPService:invokeService(...) - invoking target service");
 		Response response = this.serve(request);
-		if (LOG.isEnabledFor(Level.INFO))
+	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:invokeService(...) - set response message");
 
 		ByteArrayMessageElement returnMessageElement = new ByteArrayMessageElement(
@@ -534,27 +562,59 @@ public class SOAPService {
 	 * Service this a connection (InputPipe and Output pipe)
 	 */
 	public Response serve(Request request) throws Exception {
-		if (LOG.isEnabledFor(Level.INFO))
-			System.out.println("-> SOAPService:service(...) - get AxisServer");
+	//	if (LOG.isEnabledFor(Level.INFO))
+			System.out.println("-> SOAPService:service(...) - get MAS server");
+			
+	Response response = null;
 
-		AxisServer server = AXISBootstrap.getInstance().getAxisServer();
+	
+try{
+	URL u = new URL("http://localhost:8088/" + this.serviceDescriptor.getName());
+	System.out.println("URL impostato: "+ u);
+	  HttpURLConnection huc = (HttpURLConnection) u.openConnection(); 
+	  HttpURLConnection.setFollowRedirects(false);
+	  huc.setDoOutput(true);
+	  huc.setRequestMethod("GET"); 
+	 // huc.addRequestProperty("SOAPAction","");
+	  huc.connect(); 
+	  OutputStream os = huc.getOutputStream(); 
+	  OutputStreamWriter wout = new OutputStreamWriter(os);  
+		System.out.println("-> SOAPService:service(...) - set request message");
+	  wout.write(request.getMessage());            
+	  wout.flush();                // These 3 lines
+	  wout.write('\r');            // are extremely important 
+	  wout.write('\n');            // which help flush data
+	  wout.close();  
+	  os.close();
+	  
+	  InputStream in = huc.getInputStream(); 
+	  int k;
+	  StringBuffer resp = new StringBuffer();
+	  
+	  while ((k = in.read()) != -1) 
+		  resp.append((char)k);
+	  System.out.println("-> SOAPService:service(...) - got response message");
+	
+	  //questo non sono sicura che ci voglia, forse il parsing lo fa il client generico
+	/*  String result = processRespMesg(resp.toString());
+	  System.out.println("Result in connectServer()::"+ result);  */
+	  
+	  String soapRespMesg = resp.toString();
+	  soapRespMesg = soapRespMesg.replaceAll("&lt;","<");
+	  soapRespMesg = soapRespMesg.replaceAll("&gt;",">");
+	 
+	  in.close(); 
+  	  huc.disconnect();
 
-		if (LOG.isEnabledFor(Level.INFO))
-			System.out
-					.println("-> SOAPService:service(...) - create MessageContext");
-		MessageContext msgContext = new MessageContext(server);
+		
+  	//TODO questa parte � tutta di AXIS	
+  	  
+	/*	AxisServer server = AXISBootstrap.getInstance().getAxisServer();	
+		
+		MessageContext msgContext = new MessageContext();
 
-		// The following line puts the whole message as the SOAPPart which
-		// means that attachments don't work.
 		Message msg = new Message(request.getMessage());
-		if (LOG.isEnabledFor(Level.INFO))
-			System.out
-					.println("-> SOAPService:service(...) - set request message");
-
 		if (context != null) {
-			if (LOG.isEnabledFor(Level.INFO))
-				System.out
-						.println("-> SOAPService:service(...) - set context object");
 			msgContext.setProperty(Constants.MC_SERVLET_ENDPOINT_CONTEXT,
 					context);
 		}
@@ -562,19 +622,8 @@ public class SOAPService {
 		msgContext.setRequestMessage(msg);
 
 		try {
-			// System.out.println("Trying to invoke target service: " +
-			// msgContext.getTargetService() );
-			if (LOG.isEnabledFor(Level.INFO))
-				System.out
-						.println("-> SOAPService:service(...) - server.invoke(msgContext)");
-
 			server.invoke(msgContext);
-			msg = msgContext.getResponseMessage();
-
-			if (LOG.isEnabledFor(Level.INFO))
-				System.out
-						.println("-> SOAPService:service(...) - got response message");
-
+			msg = msgContext.getResponseMessage();		
 		} catch (AxisFault af) {
 			System.out.println("Axis invoke() returned an AxisFault");
 			msg = new Message(af);
@@ -584,20 +633,30 @@ public class SOAPService {
 			System.out.println("Axis invoke() returned an Exception");
 			msg = new Message(new AxisFault(e.toString()));
 			msg.setMessageContext(msgContext);
-		}
-
+		}  */
+		
+		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		msg.writeTo(baos);
-
+	//	msg.writeTo(baos);
+		baos.write(soapRespMesg.getBytes());
+		
+		
 		String sres = baos.toString();
 		System.out
 				.println("-> SOAPService:service(...) - create response and return it");
-		Response response = new Response();
-		response.setMessage(sres);
-
+		response = new Response();
+		response.setMessage(sres); 
+} 
+catch(Exception e){
+	System.out.println("connectToServer catch");
+	e.printStackTrace();
+}
 		return response;
-	}
 
+
+	}
+  
+	
 	/**
 	 * Build the Authentication Response message to send to client peer with
 	 * server peer advertisement and the service private secure pipe
