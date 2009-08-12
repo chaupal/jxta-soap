@@ -23,7 +23,7 @@
 
 
   <!-- Compile -->
-  <target name="build" description="Build hello client">
+  <target name="build" description="Build hello server">
     <mkdir dir="${build.dir}"/>
     <javac debug="on" deprecation="on" destdir="${build.dir}">
       <compilerarg value="-Xlint" />
