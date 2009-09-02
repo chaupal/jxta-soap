@@ -11,8 +11,6 @@
 
 package net.jxta.soap.cdc;
 
-//import net.jxta.soap.bootstrap.AXISBootstrap;
-//import net.jxta.soap.deploy.SOAPServiceDeployer;
 import net.jxta.soap.cdc.security.policy.Policy;
 import net.jxta.soap.cdc.util.URLBase64;
 
@@ -459,11 +457,11 @@ public class SOAPService {
 	 */
 	public void acceptSingleThread(InputPipe pipe) throws Exception {
 		System.out
-				.println("-> SOAPService:acceptOnSecurePipe(...) - waitForMessage()");
+				.println("-> SOAPService:acceptOnSecurePipe(...) single thread - waitForMessage()");
 		// Listen on the pipe for a client message
 		net.jxta.endpoint.Message msg = pipe.waitForMessage();
 		System.out
-				.println("-> SOAPService:acceptOnSecurePipe(...) - message arrived!");
+				.println("-> SOAPService:acceptOnSecurePipe(...) single thread - message arrived!");
 		// go ahead and get the next message
 
 		// Read the message as
@@ -471,14 +469,14 @@ public class SOAPService {
 				.getMessageElement("message");
 	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
-					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'message' element: \n"
+					.println("-> SOAPService:acceptOnSecurePipe(...) single thread - get 'message' element: \n"
 							+ msgString.toString());
 
 		ByteArrayMessageElement remoteInputPipeAdvertisement = (ByteArrayMessageElement) msg
 				.getMessageElement("remote-input-pipe");
 	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
-					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'remote-input-pipe' element: \n"
+					.println("-> SOAPService:acceptOnSecurePipe(...) single thread - get 'remote-input-pipe' element: \n"
 							+ remoteInputPipeAdvertisement.toString());
 
 		if (msgString.toString() == null) {
@@ -506,7 +504,7 @@ public class SOAPService {
 		do {
 			try {
 				System.out
-						.print("-> SOAPService:acceptOnSecurePipe(...) - binding op with remote ip... ("
+						.print("-> SOAPService:acceptOnSecurePipe(...)single thread - binding op with remote ip... ("
 								+ attempt + ")\t");
 				output = pipeSvc.createOutputPipe(rpa, timeout);
 				System.out.println("OK");
