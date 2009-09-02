@@ -13,9 +13,9 @@
 
    <property name="libjxme.dir" value="../../lib/jxme"/>
 	<property name="libksoap2.dir" value="../../lib/ksoap2"/>
-		<property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>	
- <!--	<property name="libbase64.dir" value="../../lib/base64.jar"/>   -->
-  <!-- Location for the execution -->
+	<property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>	
+ 
+	<!-- Location for the execution -->
   <property name="build.dir" value="build"/>
 
   <!-- Temporary locations for build -->
@@ -37,7 +37,6 @@
         <pathelement location="${libsoap}"/>
       	<pathelement location="${libksoap2}"/>
       	<pathelement location="${log4j}"/>
-      	<pathelement location="${libbase64}"/>
         <fileset dir="${libmas.dir}">
           <include name="**/*.jar"/>
         </fileset>
@@ -66,7 +65,6 @@
       <pathelement location="${libmas.dir}"/>
       <pathelement location="${libjxme.dir}"/>
       <pathelement location="${libsoap}"/>
-    	<pathelement location="${libbase64}"/>
     	<pathelement location="${log4j}"/>
     	
         <fileset dir="${libmas.dir}">
