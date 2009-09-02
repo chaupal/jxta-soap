@@ -32,15 +32,11 @@ import net.jxta.platform.NetworkConfigurator;
 import net.jxta.protocol.ModuleSpecAdvertisement;
 import net.jxta.rendezvous.RendezVousService;
 
-
-//import jxta.security.util.URLBase64;
-
-import net.jxta.soap.CallFactory;
-//import net.jxta.soap.deploy.SOAPTransportDeployer;
-import net.jxta.soap.ServiceDescriptor;
-import net.jxta.soap.transport.KSOAPpipeTransport;
-
-//import org.apache.axis.client.Call;   
+import net.jxta.soap.cdc.CallFactory;
+import net.jxta.soap.cdc.ServiceDescriptor;
+import net.jxta.soap.cdc.transport.KSoapPipeTransport;
+import net.jxta.soap.cdc.util.Base64;
+  
 import org.ksoap2.serialization.*;
 import org.ksoap2.*;
 import org.ksoap2.transport.*;
@@ -326,7 +322,7 @@ public class ReverseClient {
                   netPeerGroup);     	 
            
            System.out.println("Create call object with properties for transport");
-           KSOAPpipeTransport transport= callFactory.getTransport(call);
+           KSoapPipeTransport transport= callFactory.getTransport(call);
            System.out.println("Numero di property:  " + call.getPropertyCount());
            System.out.println("SoapObject creato:   " + call.getName());
        
