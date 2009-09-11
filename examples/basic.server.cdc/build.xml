@@ -10,11 +10,10 @@
   <property name="lib.dir" value="../../lib"/>
   <property name="libsoap" value="../../soap.cdc/build/soap.cdc-2.5.jar"/>
   <property name="libmas.dir" value="../../lib/mas"/>
-
-   <property name="libjxme.dir" value="../../lib/jxme"/>
+  <property name="libjxme.dir" value="../../lib/jxme"/>
 	<property name="libksoap2.dir" value="../../lib/ksoap2"/>
 	<property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>	
- 
+	<property name="cdc_lib" value="../../lib/cdc/personal_security.jar"/>
 	<!-- Location for the execution -->
   <property name="build.dir" value="build"/>
 
@@ -37,6 +36,7 @@
         <pathelement location="${libsoap}"/>
       	<pathelement location="${libksoap2}"/>
       	<pathelement location="${log4j}"/>
+      	<pathelement location="${cdc_lib}"/>
         <fileset dir="${libmas.dir}">
           <include name="**/*.jar"/>
         </fileset>
@@ -66,6 +66,7 @@
       <pathelement location="${libjxme.dir}"/>
       <pathelement location="${libsoap}"/>
     	<pathelement location="${log4j}"/>
+    	<pathelement location="${cdc_lib}"/>
     	
         <fileset dir="${libmas.dir}">
           <include name="**/*.jar"/>
