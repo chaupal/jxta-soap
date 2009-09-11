@@ -323,8 +323,8 @@ public class ReverseClient {
            
            System.out.println("Create call object with properties for transport");
            KSoapPipeTransport transport= callFactory.getTransport(call);
-           System.out.println("Numero di property:  " + call.getPropertyCount());
-           System.out.println("SoapObject creato:   " + call.getName());
+     //      System.out.println("Numero di property:  " + call.getPropertyCount());
+     //      System.out.println("SoapObject creato:   " + call.getName());
        
            
            SoapObject requestObject = new SoapObject("ReverseService","Reverse" );
@@ -345,7 +345,7 @@ public class ReverseClient {
               try {
               System.out.println(envelope.getResponse());
             //  envelope= null;
-              } catch (Exception e){ System.out.println("ERRORE!");}
+              } catch (Exception e){ System.out.println("ERROR! No response from server...");}
  
               System.out.println(time);
            }  
