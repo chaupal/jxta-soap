@@ -106,7 +106,7 @@ public class ReverseServer {
             }
             // create and Start the default jxta NetPeerGroup
             netPeerGroup  = PeerGroupFactory.newNetPeerGroup();
-            System.out.println("default jxta netPeerGroup creato");
+        //    System.out.println("default jxta netPeerGroup creato");
             rendezvous = netPeerGroup.getRendezVousService();
             System.out.println("Node PeerID :"+netPeerGroup.getPeerID().getUniqueValue().toString());           
         } catch (Exception e) {
