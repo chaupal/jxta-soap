@@ -31,13 +31,13 @@ import org.apache.axis.utils.XMLUtils;
 
 import org.w3c.dom.*;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Level;
+//import org.apache.log4j.Logger;
 
 
 public class SOAPServiceDeployer {
 
-    private final static Logger LOG = Logger.getLogger(SOAPServiceDeployer.class.getName());
+//    private final static Logger LOG = Logger.getLogger(SOAPServiceDeployer.class.getName());
     private ServiceDescriptor descriptor = null;
     private String wsdd = null;
     
