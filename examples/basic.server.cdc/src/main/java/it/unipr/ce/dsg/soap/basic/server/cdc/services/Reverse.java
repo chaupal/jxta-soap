@@ -17,9 +17,9 @@ public class Reverse implements MService {
 
 	public Object process(String methodName, Object[] args) {
 		if(methodName.equals("rev")){
-			System.out.println("Il metodo � invocato correttaemnte"); 
+			System.out.println("Il metodo e' invocato correttaemnte"); 
 			return this.reverse((String) args[0]); }
-		System.out.println("Il metodo invocato non � corretto !!!");
+		System.out.println("Il metodo invocato non e' corretto !!!");
 		return "Method not found";
 	}
 	
