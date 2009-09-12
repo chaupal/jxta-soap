@@ -11,6 +11,8 @@
 
 package net.jxta.soap.cdc;
 
+//import net.jxta.soap.bootstrap.AXISBootstrap;
+//import net.jxta.soap.deploy.SOAPServiceDeployer;
 import net.jxta.soap.cdc.security.policy.Policy;
 import net.jxta.soap.cdc.util.URLBase64;
 
@@ -18,10 +20,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-//import java.io.InputStreamReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-//import java.security.cert.X509Certificate;
+import java.security.cert.X509Certificate;
 import java.lang.Exception;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,7 +39,7 @@ import net.jxta.document.Element;
 import net.jxta.document.MimeMediaType;
 import net.jxta.document.StructuredDocument;
 import net.jxta.document.StructuredDocumentFactory;
-//import net.jxta.document.StructuredDocumentUtils;
+import net.jxta.document.StructuredDocumentUtils;
 import net.jxta.document.StructuredTextDocument;
 import net.jxta.document.TextElement;
 import net.jxta.document.XMLDocument;
@@ -46,7 +48,7 @@ import net.jxta.endpoint.ByteArrayMessageElement;
 import net.jxta.endpoint.InputStreamMessageElement;
 import net.jxta.id.IDFactory;
 import net.jxta.impl.document.LiteXMLDocument;
-//import net.jxta.peer.PeerID;
+import net.jxta.peer.PeerID;
 import net.jxta.peergroup.PeerGroup;
 import net.jxta.peergroup.PeerGroupID;
 import net.jxta.pipe.InputPipe;
@@ -59,16 +61,16 @@ import net.jxta.protocol.PeerAdvertisement;
 import net.jxta.protocol.PipeAdvertisement;
 
 import it.polimi.si.mas.server.*;
-//import it.polimi.si.mas.message.*;
+import it.polimi.si.mas.message.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-/*import org.apache.log4j.*;
+import org.apache.log4j.*;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;  */
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * The SOAPService class supports a mechanism for deploying JXTA services and
@@ -87,12 +89,12 @@ public class SOAPService {
 
 	private LinkedList secureInputPipeAdvList = new LinkedList();
 
-	private LinkedList secureInputPipeList = new LinkedList();    
+	private LinkedList secureInputPipeList = new LinkedList();
 	private ServerBootstrap mas = new  ServerBootstrap();
 	// private PolicyManager policyManager = null;
-/*	private String policyName = null;
-	private String policyType = null;  */
-	private Object context = null;    
+	private String policyName = null;
+	private String policyType = null;
+	private Object context = null;
 
 	/**
 	 * Internal class to periodically publish the module spec adv when it
@@ -130,7 +132,7 @@ public class SOAPService {
 
 	private ModuleSpecAdvertisement msadv = null;
 	private AdvPublishTask advPublishTask = null;
-//	private Timer publishtimer = null;
+	private Timer publishtimer = null;
 	private PeerGroup pg = null;
 	private ServiceDescriptor serviceDescriptor = null;
 	private DiscoveryService discSvc = null;
@@ -166,29 +168,28 @@ public class SOAPService {
 		this.pg = pg;
 
 		if (pg == null)
-			throw new Exception(
-					"Must specify a PeerGroup to publish the service!");
+			throw new Exception("Must specify a PeerGroup to publish the service!");
 
 		if (!descriptor.getPeerGroupID().equals(pg.getPeerGroupID().toString()))
-			throw new Exception(
-					"PeerGroup and Descriptor's PeerGroupID do not match!");
+			throw new Exception("PeerGroup and Descriptor's PeerGroupID do not match!");
 
 		this.setServiceDescriptor(descriptor);
 
-//TODO sostituire il bootstrap di Axis con il server MAS ?
-		Thread t = new Thread(new Runnable(){
+		//TODO sostituire il bootstrap di Axis con il server MAS?
+		//ServerBootstrap mas = new ServerBootstrap();
+		//mas.startServer();
+		Thread t = new Thread(new Runnable(){  // MAS server runs in a separate thread
 			public void run(){
-		mas.startServer();
-		System.out.println("Micro application server started");
+				mas.startServer();
 			}
-		}
+			}
 		);
 		t.start();
 		
 		
 		
 		// bootstrap Axis if it hasn't been done before.
-/*		if (LOG.isEnabledFor(Level.INFO))
+		/*		if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - Axis Bootstrap");
 		AXISBootstrap.getInstance().bootstrap();   */
 
@@ -229,9 +230,9 @@ public class SOAPService {
 	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out.println("-> SOAPService:init() - Deploying SOAP service");
 
-//TODO : estrarre il wsdd e fare il deploy--> con MAS la procedura è manuale
+		//TODO : estrarre il wsdd e fare il deploy--> con MAS la procedura e' manuale
 		// ***CHIARA***
-/*		String wsdd = extractServiceWSDD(param);
+		/*		String wsdd = extractServiceWSDD(param);
 		new SOAPServiceDeployer(descriptor).deploy(wsdd);  */
 		// ***CHIARA***
 	}
@@ -456,11 +457,11 @@ public class SOAPService {
 	 */
 	public void acceptSingleThread(InputPipe pipe) throws Exception {
 		System.out
-				.println("-> SOAPService:acceptOnSecurePipe(...) single thread - waitForMessage()");
+				.println("-> SOAPService:acceptOnSecurePipe(...) - waitForMessage()");
 		// Listen on the pipe for a client message
 		net.jxta.endpoint.Message msg = pipe.waitForMessage();
 		System.out
-				.println("-> SOAPService:acceptOnSecurePipe(...) single thread - message arrived!");
+				.println("-> SOAPService:acceptOnSecurePipe(...) - message arrived!");
 		// go ahead and get the next message
 
 		// Read the message as
@@ -468,14 +469,14 @@ public class SOAPService {
 				.getMessageElement("message");
 	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
-					.println("-> SOAPService:acceptOnSecurePipe(...) single thread - get 'message' element: \n"
+					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'message' element: \n"
 							+ msgString.toString());
 
 		ByteArrayMessageElement remoteInputPipeAdvertisement = (ByteArrayMessageElement) msg
 				.getMessageElement("remote-input-pipe");
 	//	if (LOG.isEnabledFor(Level.INFO))
 			System.out
-					.println("-> SOAPService:acceptOnSecurePipe(...) single thread - get 'remote-input-pipe' element: \n"
+					.println("-> SOAPService:acceptOnSecurePipe(...) - get 'remote-input-pipe' element: \n"
 							+ remoteInputPipeAdvertisement.toString());
 
 		if (msgString.toString() == null) {
@@ -503,7 +504,7 @@ public class SOAPService {
 		do {
 			try {
 				System.out
-						.print("-> SOAPService:acceptOnSecurePipe(...)single thread - binding op with remote ip... ("
+						.print("-> SOAPService:acceptOnSecurePipe(...) - binding op with remote ip... ("
 								+ attempt + ")\t");
 				output = pipeSvc.createOutputPipe(rpa, timeout);
 				System.out.println("OK");
@@ -597,14 +598,15 @@ try{
 	  System.out.println("Result in connectServer()::"+ result);  */
 	  
 	  String soapRespMesg = resp.toString();
-	  soapRespMesg = soapRespMesg.replaceAll("&lt;","<");
-	  soapRespMesg = soapRespMesg.replaceAll("&gt;",">");
-	 
+	  
+	  soapRespMesg = replaceAll(soapRespMesg, "&lt;", "<"); // String's replaceAll() does not exists in java 1.3
+	  soapRespMesg = replaceAll(soapRespMesg, "&gt;", ">");
+	  
 	  in.close(); 
   	  huc.disconnect();
 
 		
-  	//TODO questa parte � tutta di AXIS	
+  	//TODO questa parte  e' tutta di AXIS	
   	  
 	/*	AxisServer server = AXISBootstrap.getInstance().getAxisServer();	
 		
@@ -848,4 +850,19 @@ catch(Exception e){
 		this.context = context;
 	}
 
+	private static String replaceAll(String source,
+									String toReplace,
+									String replacement) {
+		int idx = source.lastIndexOf( toReplace );
+		if ( idx != -1 ) {
+			StringBuffer ret = new StringBuffer( source );
+			ret.replace( idx, idx+toReplace.length(), replacement );
+			while( (idx=source.lastIndexOf(toReplace, idx-1)) != -1 ) {
+				ret.replace( idx, idx+toReplace.length(), replacement );
+			}
+		source = ret.toString();
+		}
+
+		return source;
+	}
 }
