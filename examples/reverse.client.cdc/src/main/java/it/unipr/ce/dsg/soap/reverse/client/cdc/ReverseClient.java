@@ -1,4 +1,6 @@
 
+package it.unipr.ce.dsg.soap.reverse.client.cdc;
+
 /* Copyright (c) 2005 JXTA-SOAP Project
 *
 * Redistributions in source code form must reproduce the above copyright
@@ -12,7 +14,7 @@
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+//import java.net.URI;
 
 import java.io.FileOutputStream;
 import java.util.Enumeration;
@@ -107,7 +109,7 @@ public class ReverseClient {
                config.setPrincipal(principal);
                config.setPassword(password);
              //  try {
-               	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist2.txt"); 
+               	config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt"); 
                 /*   config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                    config.addRelaySeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/relays.cgi?2"));
                } catch (java.net.URISyntaxException use) {
@@ -239,7 +241,7 @@ public class ReverseClient {
     */
    private void discoverServices(){
        int found = 0;
-       int timeout = 500;     // standard timeout to wait for peers
+       int timeout = 5000;     // standard timeout to wait for peers
        Object tempAdv;
      //  Vector<ModuleSpecAdvertisement> serviceAdvs = new Vector<ModuleSpecAdvertisement>();
        Vector serviceAdvs = new Vector();
@@ -327,13 +329,13 @@ public class ReverseClient {
      //      System.out.println("SoapObject creato:   " + call.getName());
        
            
-           SoapObject requestObject = new SoapObject("ReverseService","Reverse" );
+           SoapObject requestObject = new SoapObject("Reverse","rev");
          //  requestObject.addProperty(desc1.getName(), "Hey JXTA peer!");
            requestObject.addProperty("parameter1", "This is a string");
 
         //   SoapSerializationEnvelope envelope =callFactory.getEnvelope(requestObject);
            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-          int i = 5;
+          int i = 1;
           long totalTime = 0;
            while( i-- > 0 ) {         
                envelope.setOutputSoapObject(requestObject);
