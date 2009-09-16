@@ -14,9 +14,9 @@
   	<property name="libjxme.dir" value="../../lib/jxme"/>
   	<property name="libksoap2.dir" value="../../lib/ksoap2"/>
   	<property name="log4j" value="../../lib/axis/log4j-1.2.8.jar"/>
-  	<property name="cdc_lib" value="${env.CDC_HOME}/lib/btclasses.zip:${env.CDC_HOME}/lib/personal_security.jar:${env.CDC_HOME}/lib/jce.jar"/>
-  	<property name="xml" value="../../lib/wss4j/xml-apis.jar"/>
-
+	<property name="xml" value="../../lib/wss4j/xml-apis.jar"/>
+	<property name="cdc_lib" value="${lib.dir}/cdc/lib/btclasses.zip:${lib.dir}/cdc/lib/personal_security.jar:${lib.dir}/cdc/lib/jce.jar"/>
+  	
   	<!-- Location for the execution -->
   	<property name="build.dir" value="build"/>
 
