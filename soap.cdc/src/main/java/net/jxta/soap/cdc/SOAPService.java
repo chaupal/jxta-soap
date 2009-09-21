@@ -95,7 +95,7 @@ public class SOAPService {
 	private String policyName = null;
 	private String policyType = null;
 	private Object context = null;
-
+	private String serviceLocation = null;
 	/**
 	 * Internal class to periodically publish the module spec adv when it
 	 * expires.
@@ -143,16 +143,17 @@ public class SOAPService {
 	/**
 	 * Standard constructor
 	 */
-	public SOAPService() {
-		this("INFO");
+	public SOAPService(String serviceLocation) {
+		this(serviceLocation, "INFO" );
 	}
 
 	/**
 	 * Standard constructor
 	 */
-	public SOAPService(String logLevel) {
+	public SOAPService( String serviceLocation, String logLevel) {
 		this.logLevel = logLevel;
 		LOG.setLevel(Level.toLevel(this.logLevel));
+		this.serviceLocation= serviceLocation;
 	}
 
 	/**
