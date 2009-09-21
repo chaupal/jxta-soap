@@ -169,7 +169,8 @@ public class ReverseServer {
         System.out.println("\nCreate new SOAPService");
         System.out.println("-------------------------------------------");         
         System.out.println("1 Creating new SOAPService instance...");
-        SOAPService service = new SOAPService();
+        //TODO qui leggi da file di configurazione e passa il package alla istanza di soap service creata
+        SOAPService service = new SOAPService("it.unipr.ce.dsg.soap.basic.server.cdc.services");
         
         // Create the service descriptor
         System.out.println("2 Creating ServiceDescriptor...");
