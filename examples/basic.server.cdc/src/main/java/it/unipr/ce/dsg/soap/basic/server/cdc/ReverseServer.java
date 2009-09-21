@@ -34,10 +34,10 @@ import net.jxta.soap.cdc.SOAPServiceThread;
 import net.jxta.soap.cdc.SOAPService;
 import net.jxta.soap.cdc.util.Base64;
 
-import it.polimi.si.mas.services.*;
 //import org.ksoap2.serialization.*;
 //import org.ksoap2.*;
 //import org.ksoap2.transport.*;
+import it.unipr.ce.dsg.soap.basic.server.cdc.services.Reverse;
 
 public class ReverseServer {
 
@@ -170,7 +170,7 @@ public class ReverseServer {
         System.out.println("-------------------------------------------");         
         System.out.println("1 Creating new SOAPService instance...");
         //TODO qui leggi da file di configurazione e passa il package alla istanza di soap service creata
-        SOAPService service = new SOAPService("it.unipr.ce.dsg.soap.basic.server.cdc.services");
+        SOAPService service = new SOAPService();
         
         // Create the service descriptor
         System.out.println("2 Creating ServiceDescriptor...");
