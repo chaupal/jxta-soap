@@ -1,0 +1,17 @@
+To compile JXTA-SOAP CDC version: 
+
+Go to the soap.cdc directory and run
+
+ant soap.cdc
+ant project.jar
+
+These commands generate a soap.cdc-2.5.jar file in the build/ folder.
+
+
+A good starting point to see how things work for CDC version of the project is basic.server.cdc 
+example in the examples/ folder with the corresponding reverse.client.cdc.
+
+
+
+Maria Chiara Laghi (mchiara)
+laghi@ce.unipr.it
