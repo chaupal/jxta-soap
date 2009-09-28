@@ -15,6 +15,9 @@ from JXME 2.5:
 jxme-cdc.jar
 jxta-tools.jar
 
+From J2ME:
+CDC 1.1/Personal Profile 1.1 (all libs and binaries)
+
 From Axis 1.4:
 axis.jar  
 axis-ant.jar
@@ -25,6 +28,12 @@ log4j.properties
 log4j-1.2.8.jar 
 saaj.jar  
 wsdl4j-1.5.1.jar
+
+From kSoap2:
+ksoap2-j2se-full-2.1.2.jar
+
+From Micro Application Server (MAS):
+mas-dsg.jar
 
 From wss4j 1.1.0: 
 addressing-1.0.jar  
