@@ -1,0 +1,25 @@
+This folder contains ReverseClient example for CDC version of Jxta-Soap; it can be executed
+to invoke Reverse service that is deployed by ReverseServer in basic.server.cdc directory.
+You have to run the ReverseServer and ReverseClient on different machines 
+(or the same machine, but on different ports). 
+
+Both client and server are edge nodes; currently they are configured in multicast mode, 
+so no connection to rendezvous node is required.
+
+If multicast is disabled, you have to edit the following line of code:
+ 
+config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist2.txt"); 
+
+to use your own list of hosts running rendezvous peers 
+(which must include the host running the ReverseServer, of course).
+
+Note that both server and client create a private NetPeerGroup (see .jxta/config.properties), 
+and the public rendezvous list provided by JXTA official servers is not used.
+
+You can compile and start the client from the reverse.client.cdc folder with the following commands:
+
+ant build
+ant run
+
+A clear target is also available in order to clean the project for a new execution:
+ant clear
