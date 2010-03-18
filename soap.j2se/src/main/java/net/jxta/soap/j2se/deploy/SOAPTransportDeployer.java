@@ -66,7 +66,7 @@ public class SOAPTransportDeployer {
         
         return "<deployment name=\"bridge\" xmlns=\"" + WSDDConstants.URI_WSDD + "\"\n" +
                "            xmlns:java=\"" + WSDDConstants.URI_WSDD_JAVA + "\">\n" +
-               "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.transport.JXTASOAPTransportSender\"/>\n" +
+               "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.j2se.transport.JXTASOAPTransportSender\"/>\n" +
                "    <transport name=\"JXTASOAPTransport\" pivot=\"JXTASOAPTransportSender\"/>\n" +
                "</deployment>";
         
