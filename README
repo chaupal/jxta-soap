@@ -1,7 +1,7 @@
 
 To compile JXTA-SOAP J2SE version: 
 
-cd trunk/soap.j2se/src
+cd trunk/soap.j2se/
 ant soap.j2se
 ant soap.j2se.jar
 
