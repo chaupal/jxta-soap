@@ -52,7 +52,7 @@ public class HelloService implements ServiceLifecycle{
     }
     
     public static final ServiceDescriptor DESCRIPTOR =
-        new ServiceDescriptor("HelloService",     // class
+        new ServiceDescriptor("it.unipr.ce.dsg.soap.basic.server.j2se.HelloService",     // class
         "HelloService",                       // name
         "0.2",                                // version
         "Distributed Systems Group",          // creator
