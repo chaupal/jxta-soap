@@ -68,7 +68,7 @@ public class SOAPServiceDeployer {
          
         this.wsdd = "<deployment xmlns=\"" + WSDDConstants.URI_WSDD + "\" " + 
             "            xmlns:java=\"" + WSDDConstants.URI_WSDD_JAVA + "\">\n" +
-            "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.transport.JXTASOAPTransportSender\"/>\n" +
+            "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.j2se.transport.JXTASOAPTransportSender\"/>\n" +
             "    <transport name=\"JXTASOAPTransport\" pivot=\"JXTASOAPTransportSender\"/>\n" +
             "     <service name=\"" + descriptor.getName() + "\" provider=\"java:RPC\">\n" +
             "         <parameter name=\"allowedMethods\" value=\"*\"/>\n" +
@@ -127,7 +127,7 @@ public class SOAPServiceDeployer {
      * Servicename should have the same namespace as the "targetNamespace"
      * at the top of the wsdl file.
      */
-    public Service getService(String wsdlLocation, QName servicename) {
+    public Service getService(String wsdlLocation, QName serviceName) {
         try{
             if( descriptor.getName() == null ) {
             	LOG.warn("You must set the classname of the service descriptor" +
@@ -136,9 +136,11 @@ public class SOAPServiceDeployer {
             }
             
             AxisProperties.setProperty(EngineConfigurationFactory.SYSTEM_PROPERTY_NAME, 
-            "net.jxta.soap.JXTAEngineConfigurationFactory");
+            "net.jxta.soap.j2se.JXTAEngineConfigurationFactory");
             
-            Service service = new Service( wsdlLocation, servicename );
+            Service service = new Service( wsdlLocation, serviceName );
+            System.out.println("SOAPServiceDeployer.getService(): wsdlLocation = " + wsdlLocation);
+            System.out.println("SOAPServiceDeployer.getService(): serviceName = " + serviceName);
             
             return service;
         
@@ -154,10 +156,10 @@ public class SOAPServiceDeployer {
     /**
      * Get a SOAP Service using WSDL.
      *
-     * Servicename should have the same namespace as the "targetNamespace"
+     * serviceName should have the same namespace as the "targetNamespace"
      * at the top of the wsdl file.
      */
-    public Service getService(InputStream wsdlInputStream, QName servicename) {
+    public Service getService(InputStream wsdlInputStream, QName serviceName) {
         try{
             if( descriptor.getName() == null ) {
             	LOG.warn("You must set the classname of the service descriptor" +
@@ -166,9 +168,9 @@ public class SOAPServiceDeployer {
             }
             
             AxisProperties.setProperty(EngineConfigurationFactory.SYSTEM_PROPERTY_NAME, 
-            "net.jxta.soap.JXTAEngineConfigurationFactory");
+            "net.jxta.soap.j2se.JXTAEngineConfigurationFactory");
             
-            Service service = new Service( wsdlInputStream, servicename );
+            Service service = new Service( wsdlInputStream, serviceName );
             
             return service;
         

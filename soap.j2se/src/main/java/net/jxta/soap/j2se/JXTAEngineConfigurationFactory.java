@@ -76,7 +76,7 @@ public class JXTAEngineConfigurationFactory implements EngineConfigurationFactor
         
 	return "<deployment xmlns=\"" + WSDDConstants.URI_WSDD + "\" " +
 	    "            xmlns:java=\"" + WSDDConstants.URI_WSDD_JAVA + "\">\n" +
-	    "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.transport.JXTASOAPTransportSender\"/>\n" +
+	    "    <handler name=\"JXTASOAPTransportSender\" type=\"java:net.jxta.soap.j2se.transport.JXTASOAPTransportSender\"/>\n" +
 	    "    <transport name=\"JXTASOAPTransport\" pivot=\"JXTASOAPTransportSender\"/>\n" +
 	    //                "     <service name=\"" + descriptor.getName() + "\" provider=\"java:RPC\">\n" +
 	    //                "         <parameter name=\"allowedMethods\" value=\"*\"/>\n" +
