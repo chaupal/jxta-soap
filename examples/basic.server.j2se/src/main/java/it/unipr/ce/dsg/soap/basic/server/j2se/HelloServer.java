@@ -97,7 +97,7 @@ public class HelloServer {
                 config.setUseMulticast(multicastOn); 
                 config.setPrincipal(principal);
                 config.setPassword(password);
-                config.addRdvSeedingURI("http://dsg.ce.unipr.it/research/SP2A/rdvlist.txt");
+                config.addRdvSeedingURI("http://dl.dropbox.com/u/1141632/rdvlist.txt");
                 /*
                 config.addRdvSeedingURI(new URI("http://rdv.jxtahosts.net/cgi-bin/rendezvous.cgi?2"));
                 try {    
