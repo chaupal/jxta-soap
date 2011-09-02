@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="HelloClient" default="build" basedir=".">
+
+  <!-- Sources locations for build -->
+  <property name="src.dir" value="src"/>
+  <property name="examples.dir" value="examples"/>
+
+  <!-- Libraries location for build -->
+  <property name="lib.dir" value="../../../lib"/>
+  <property name="libsoap" value="../../soap.j2se/build/soap.j2se-2.5.jar"/>
+  <property name="libaxis.dir" value="../../lib/axis"/>
+  <property name="libjxta.dir" value="../../lib/jxse"/>
+
+  <!-- Location for the execution -->
+  <property name="build.dir" value="build"/>
+
+  <!-- Temporary locations for build -->
+  <property name="docs.dir" value="docs"/>
+
+  <!-- Conditions for compiling examples -->
+  <target name="init" />
+
+
+  <!-- Compile -->
+  <target name="build" description="Build hello client">
+    <mkdir dir="${build.dir}"/>
+    <javac debug="on" deprecation="on" destdir="${build.dir}">
+      <compilerarg value="-Xlint" />
+      <src path="${src.dir}" />
+      <classpath>
+        <pathelement location="${libaxis.dir}"/>
+        <pathelement location="${libjxta.dir}"/>
+        <pathelement location="${libsoap}"/>
+        <fileset dir="${libaxis.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${libjxta.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${classes.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+
+
+  <!-- Run peer -->
+  <target name="run" description="Run hello client">
+    <delete dir=".jxta/cm"/>
+    <delete file=".jxta/PlatformConfig"/>
+    <delete file=".jxta/jxta.properties"/>
+    <java classname="it.unipr.ce.dsg.soap.tls.client.j2se.HelloClient" fork="true">
+    <arg value="WARN"/>
+    <classpath>
+      <pathelement location="${libaxis.dir}"/>
+      <pathelement location="${libjxta.dir}"/>
+      <pathelement location="${libsoap}"/>
+        <fileset dir="${libaxis.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${libjxta.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+      <pathelement location="${build.dir}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- Build documentation -->
+  <target name="javadoc" description="Javadoc for application">
+    <mkdir dir="${docs.dir}/javadoc"/>
+    <javadoc destdir="${docs.dir}/javadoc">
+      <fileset dir="${src.dir}"/>
+      <classpath>
+        <pathelement location="${lib.dir}"/>
+        <fileset dir="${lib.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>
+      </classpath>
+    </javadoc>
+  </target>
+
+
+  <!-- Clean -->
+  <target name="clean" description="Clean all">
+    <!--delete dir="classes"/--> 
+    <delete dir="build"/>
+    <delete dir="docs/javadoc"/>
+    <delete file=".jxta/ConsumerPeer/cm/jxta-NetGroup/srdi/*"/>
+    <delete file=".jxta/ConsumerPeer/cm/jxta-NetGroup/*"/>
+    <delete file=".jxta/ConsumerPeer/cm/jxta-WorldGroup/*"/>
+    <delete dir=".jxta/ConsumerPeer/cm/jxta-NetGroup/srdi/"/>
+    <delete dir=".jxta/ConsumerPeer/cm/jxta-NetGroup/"/>
+    <delete dir=".jxta/ConsumerPeer/cm/jxta-WorldGroup/"/>
+    <delete dir=".jxta/ConsumerPeer/cm"/>
+    <delete file=".jxta/ConsumerPeer/PlatformConfig"/>
+    <delete dir=".jxta/ConsumerPeer"/>
+  	<delete dir=".jxta"/>
+    <delete file="HelloService.wsdl"/>
+    <delete file="server-config.wsdd"/>
+    <delete file="ServiceParm.xml"/>
+  </target>
+
+</project>
+
